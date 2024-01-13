@@ -18,7 +18,7 @@ ALLOWED_HOSTS = ['*']
 DOMAIN_NAME = 'http://localhost:8080'
 
 CORS_ORIGIN_ALLOW_ALL = False
-CORS_ORIGIN_WHITELIST = ['http://localhost:8080', 'http://localhost:3000']
+CORS_ORIGIN_WHITELIST = ['http://localhost:3000']
 
 
 # Application definition
@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders'
     'api.apps.ApiConfig'
 ]
 
