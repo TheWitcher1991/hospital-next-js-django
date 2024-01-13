@@ -1,0 +1,9 @@
+CreateAPIView – создание данных по POST-запросу;
+ListAPIView – чтение списка данных по GET-запросу;
+RetrieveAPIView – чтение конкретных данных (записи) по GET-запросу;
+DestroyAPIView – удаление данных (записи) по DELETE-запросу;
+UpdateAPIView – изменение записи по PUT- или PATCH-запросу;
+ListCreateAPIView – для чтения (по GET-запросу) и создания списка данных (по POST-запросу);
+RetrieveUpdateAPIView – чтение и изменение отдельной записи (GET-, PUT- и PATCH-запросы);
+RetrieveDestroyAPIView – чтение (GET-запрос) и удаление (DELETE-запрос) отдельной записи;
+RetrieveUpdateDestroyAPIView – чтение, изменение и добавление отдельной записи (GET-, PUT-, PATCH- и DELETE-запросы).
