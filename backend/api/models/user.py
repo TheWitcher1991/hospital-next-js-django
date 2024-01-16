@@ -14,16 +14,21 @@ class UserEmployee(models.Manager):
 
 class User(AbstractUser, PermissionsMixin):
     class Type(models.IntegerChoices):
-        PATIENT = 0, 'Пациент'
-        EMPLOYEE = 1, 'Сотрудник'
+        PATIENT = 'П', 'Пациент'
+        EMPLOYEE = 'С', 'Сотрудник'
+
+    class Floor(models.IntegerChoices):
+        MALE = 'М', 'Мужской'
+        FAMALE = 'Ж', 'Женский'
 
     email = models.EmailField('Email', max_length=256, unique=True)
     first_name = models.CharField('Имя', max_length=256)
     last_name = models.CharField('Фамилия', max_length=256)
     patronymic = models.CharField('Отчество', max_length=256)
-    age = models.CharField('Возраст', max_length=10, blank=True)
+    age = models.CharField('Возраст', max_length=10, blank=True, null=True)
     date = models.DateField('Дата рождения')
-    type = models.SmallIntegerField('Тип', choices=Type.choices)
+    type = models.CharField('Тип', choices=Type.choices, max_length=1)
+    gender = models.CharField('Пол', choices=Floor.choices, max_length=1)
 
     objects = models.Manager()
     patients = UserPatient()
@@ -40,4 +45,4 @@ class User(AbstractUser, PermissionsMixin):
         return f'{self.last_name} {self.first_name} {self.patronymic}'
 
     def __str__(self):
-        return f'{self.type} | {self.last_name} | {self.first_name}'
+        return f'{self.get_type_display()} | {self.last_name} | {self.first_name}'

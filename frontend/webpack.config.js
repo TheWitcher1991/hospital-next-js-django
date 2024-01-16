@@ -51,10 +51,9 @@ module.exports = {
         extensions: ['*', '.js', '.jsx', '.scss'],
     },
     plugins: [
-        // TODO: НАДО ЧТО-ТО ДЕЛАТЬ СО СТАТИЧНЫМИ КАРТИНКАМИ
         new CleanWebpackPlugin(),
         new HtmlWebpackPlugin({
-            title: 'TalentSpot',
+            title: 'Hospital',
             template: './public/index.html',
             favicon: './public/favicon.png'
         }),

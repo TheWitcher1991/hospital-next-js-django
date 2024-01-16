@@ -5,7 +5,7 @@ import App from './App'
 
 import {AuthProvider} from './hooks/useAuth'
 
-let user = localStorage.getItem('user')
+let user = localStorage.getItem('token')
 user = JSON.parse(user)
 
 ReactDOM.createRoot(document.getElementById('root')).render(

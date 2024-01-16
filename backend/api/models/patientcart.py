@@ -20,14 +20,14 @@ class PatientCartWithOutDiagnoseManager(models.Manager):
 
 class PatientCart(models.Model):
     class Status(models.IntegerChoices):
-        DRAFT = 0, 'Черновик'
-        ACTIVE = 1, 'Обслуживание'
-        ARCHIVE = 2, 'Архив'
+        DRAFT = '0', 'Черновик'
+        ACTIVE = '1', 'Обслуживание'
+        ARCHIVE = '2', 'Архив'
 
     diagnose = models.CharField('Диагноз', max_length=256, blank=True, null=True)
     date_visit = models.DateField('Дата визита')
     created = models.DateTimeField('Дата', auto_now_add=True)
-    status = models.SmallIntegerField('Статус', default=Status.DRAFT, choices=Status.choices)
+    status = models.CharField('Статус', default='0', choices=Status.choices, max_length=1)
     patient = models.ForeignKey(to=Patient, on_delete=models.CASCADE)
     service = models.ForeignKey(to=Service, on_delete=models.CASCADE)
 
@@ -43,3 +43,6 @@ class PatientCart(models.Model):
         indexes = [
             models.Index(fields=['-created'])
         ]
+
+    def __str__(self):
+        return f'{self.get_status_display()} | {self.date_visit}'

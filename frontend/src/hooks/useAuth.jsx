@@ -6,13 +6,9 @@ import PropTypes from 'prop-types'
 
 const AuthContext = React.createContext(null)
 
-export const AuthProvider = ({children}) => {
-    let [authToken, setAuthToken] = useState(() => {
-        localStorage.getItem('token') ? JSON.parse(localStorage.getItem('token')) : null
-    })
-    let [user, setUser] = useState(() => {
-        localStorage.getItem('token') ? jwtDecode(localStorage.getItem('token')) : null
-    })
+export const AuthProvider = ({userData, children}) => {
+    let [authToken, setAuthToken] = useState(() => localStorage.getItem('token') ? JSON.parse(localStorage.getItem('token')) : null)
+    let [user, setUser] = useState(() => localStorage.getItem('token') ? jwtDecode(localStorage.getItem('token')) : null)
     let [loading, setLoading] = useState(true)
 
     const navigate = useNavigate()
@@ -25,7 +21,8 @@ export const AuthProvider = ({children}) => {
                 'Content-Type':'application/json'
             },
             username: e.target.username.value,
-            password: e.target.password.value
+            password: e.target.password.value,
+            type: 0
         })
 
         let data = response.data
