@@ -3,7 +3,7 @@ from employee import Employee
 
 
 class ServiceType(models.Model):
-    name = models.CharField('Название', max_length=128)
+    name = models.CharField('Название', max_length=128, unique=True)
 
     class Meta:
         verbose_name = 'Специализация'
@@ -16,7 +16,7 @@ class ServiceFreeManager(models.Manager):
 
 
 class Service(models.Model):
-    name = models.CharField('Название', max_length=128)
+    name = models.CharField('Название', max_length=128, unique=True)
     price = models.DecimalField('Цена', max_digits=10, decimal_places=0, default=0)
     employee = models.ForeignKey(to=Employee, on_delete=models.CASCADE)
     service_type = models.ForeignKey(to=ServiceType, on_delete=models.CASCADE)

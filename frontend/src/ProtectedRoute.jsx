@@ -3,16 +3,16 @@ import {Route, redirect} from 'react-router-dom'
 
 import {useAuth} from './hooks/useAuth'
 
-const ProtectedRoute = ({chidlren, ...rest}) => {
+const ProtectedRoute = ({children, ...rest}) => {
     const { user } = useAuth()
-    
+
     return (
         <>
             {(!user || !user.token || user.token === '') ? redirect('/login') : (
-                <Route {...rest}>{chidlren}</Route>
+                <Route {...rest}>{children}</Route>
             )}
         </>
-       
+
     )
 }
 

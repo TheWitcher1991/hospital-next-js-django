@@ -1,36 +1,36 @@
-from django.contrib.auth.models import AbstractUser
 from django.db import models
+from user import User
 
 
 class PatientType(models.Model):
     name = models.CharField('Название', max_length=256)
     sale = models.IntegerField('Скидка', max_length=10)
 
-    def __str__(self):
-        return f'{self.name}, скидка - {self.sale}%'
-
     class Meta:
         verbose_name = 'Тип пациента'
         verbose_name_plural = 'Типы пациентов'
 
+    def __str__(self):
+        return f'{self.name} | скидка - {self.sale}%'
 
-class Patient(AbstractUser):
-    patronymic = models.CharField('Отчество', max_length=256)
-    date = models.DateField('Дата рождения')
+
+class Patient(models.Model):
     address = models.CharField('Адрес', max_length=256)
-    oms = models.CharField('ОМС', max_length=16)
-    snils = models.CharField('СНИЛС', max_length=16)
-    inn = models.CharField('ИНН', max_length=12)
-    passport = models.CharField('Паспорт', max_length=128)
-    age = models.CharField('Возраст', max_length=10, blank=True)
+    oms = models.CharField('ОМС', max_length=16, unique=True)
+    snils = models.CharField('СНИЛС', max_length=16, unique=True)
+    inn = models.CharField('ИНН', max_length=12, unique=True)
+    passport = models.CharField('Паспорт', max_length=128, unique=True)
+    user = models.OneToOneField(to=User, on_delete=models.CASCADE, primary_key=True)
     patient_type = models.ForeignKey(to=PatientType, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return f'{self.first_name} {self.last_name} | {self.email} | {self.username}'
+    objects = models.Manager()
 
     class Meta:
         verbose_name = 'Пациент'
         verbose_name_plural = 'Пациенты'
+
+    def __str__(self):
+        return f'{self.user} | {self.oms}'
 
 
 class PatientPhone(models.Model):
@@ -43,7 +43,7 @@ class PatientPhone(models.Model):
 
 
 class PatientSignature(models.Model):
-    signature = models.CharField('Открытый ключ', max_length=128)
+    signature = models.CharField('Открытый ключ', max_length=128, unique=True)
     patient = models.ForeignKey(to=Patient, on_delete=models.CASCADE)
 
     class Meta:

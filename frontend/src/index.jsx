@@ -3,10 +3,15 @@ import ReactDOM from 'react-dom/client'
 import reportWebVitals from './webvitals/reportWebVitals'
 import App from './App'
 
+import {AuthProvider} from './hooks/useAuth'
+
+let user = localStorage.getItem('user')
+user = JSON.parse(user)
+
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <React.StrictMode>
+    <AuthProvider userData={user}>
         <App/>
-    </React.StrictMode>
+    </AuthProvider>
 )
 
 reportWebVitals()
