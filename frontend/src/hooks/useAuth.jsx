@@ -22,7 +22,7 @@ export const AuthProvider = ({userData, children}) => {
             },
             username: e.target.username.value,
             password: e.target.password.value,
-            type: 0
+            type: e.target.type.value
         })
 
         let data = response.data

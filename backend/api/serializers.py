@@ -1,11 +1,5 @@
 from rest_framework import serializers
-from models.user import User
-from models.patient import Patient, PatientPhone, PatientSignature, PatientType
-from models.position import Position, Schedule, Shift, Cabinet
-from models.employee import Employee
-from models.service import ServiceType, Service
-from models.patientcart import PatientCart
-from models.agreement import Agreement, Talon
+from .models import *
 
 
 class UserSerializer(serializers.ModelSerializer):
