@@ -5,6 +5,5 @@
 /venv/
 /media/
 /frontend/node_modules
-.env
-*.txt
+/backend/crud.txt
 *.sqlite3

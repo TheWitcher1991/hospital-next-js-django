@@ -3,7 +3,7 @@ from .models import *
 
 
 class UserSerializer(serializers.ModelSerializer):
-    type = serializers.CharField(source='get_type_display')
+    role = serializers.CharField(source='get_role_display')
     gender = serializers.CharField(source='get_gender_display')
     
     class Meta:

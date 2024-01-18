@@ -1,8 +1,8 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useMemo} from 'react'
 import {jwtDecode} from 'jwt-decode'
 import {useNavigate} from 'react-router-dom'
-import axios from 'axios'
 import PropTypes from 'prop-types'
+import {api} '../utils/axios'
 
 const AuthContext = React.createContext(null)
 
@@ -13,24 +13,23 @@ export const AuthProvider = ({userData, children}) => {
 
     const navigate = useNavigate()
 
-    let login = async e => {
+    let csrf = async () => {
+        let response = await axios.get('http://localhost:8080/api/csrf/')
+        return response.headers['X-CSRFToken']
+    }
+
+    let login = async (email, password, type) => {
         e.preventDefault()
 
-        let response = await axios.post('http://localhost:8080/api/login/', {
-            headers: {
-                'Content-Type':'application/json'
-            },
-            username: e.target.username.value,
-            password: e.target.password.value,
-            type: e.target.type.value
-        })
+        let response = await api.post('/login', { email, password, type})
 
-        let data = response.data
+        let data = response.data.head
 
         if (data) {
             localStorage.setItem('token', JSON.stringify(data))
             setAuthToken(data)
-            setUser(data.access)
+            setUser(data)
+            setLoading(true)
             navigate('/')
         }
     }
@@ -42,46 +41,43 @@ export const AuthProvider = ({userData, children}) => {
         navigate('/login')
     }
 
-    let updateToken = async () => {
+    /* let updateToken = async () => {
         let response = await axios.post('http://localhost:8080/api/token/refresh/', {
             headers: {
-                'Content-Type':'application/json'
+                'Content-Type':'application/json',
+                'X-CSRFToken': csrf()
             },
             refresh: authToken.refresh
         })
-
         let data = response.data
-
         if (response.status === 200) {
             setAuthToken(data)
             setUser(data.access)
             localStorage.setItem('token', JSON.stringify(data))
-        } else {
-            logout()
-        }
-
+        } else logout()
         if (loading) setLoading(false)
-
-    }
-
-    let context = {
-        user,
-        authToken,
-        login,
-        logout
-    }
+    } */
 
     useEffect(() => {
-        if (loading) updateToken()
-
+        /*if (loading) updateToken()
         const REFRESH_INTERVAL = 1000 * 60 * 4
-
         let interval = setInterval(() => {
             if (authToken) updateToken()
         }, REFRESH_INTERVAL)
+        return () => clearInterval(interval)*/
 
-        return () => clearInterval(interval)
-    }, [authToken, loading]);
+
+    }, [user, loading])
+
+    let context = useMemo(
+        () => ({
+            user,
+            authToken,
+            login,
+            logout,
+            loading,
+        }),
+        [user, loading])
 
     return (
         <AuthContext.Provider value={context}>

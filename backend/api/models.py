@@ -1,42 +1,59 @@
 from django.contrib.auth.models import PermissionsMixin, AbstractUser
+from django.db import models
+from django.core.mail import send_mail
 
 from .managers import *
 
 
 class User(AbstractUser, PermissionsMixin):
-    class Type(models.TextChoices):
+    class Role(models.TextChoices):
         PATIENT = 'П', 'Пациент'
         EMPLOYEE = 'С', 'Сотрудник'
 
     class Floor(models.TextChoices):
         MALE = 'М', 'Мужской'
-        FAMALE = 'Ж', 'Женский'
+        FEMALE = 'Ж', 'Женский'
 
     email = models.EmailField('Email', max_length=256, unique=True)
+    password = models.CharField('Пароль', max_length=256)
+    sol = models.CharField('Соль', max_length=256, unique=True)
     first_name = models.CharField('Имя', max_length=256)
     last_name = models.CharField('Фамилия', max_length=256)
     patronymic = models.CharField('Отчество', max_length=256)
     age = models.CharField('Возраст', max_length=10, blank=True, null=True)
     date = models.DateField('Дата рождения')
-    type = models.CharField('Тип', choices=Type.choices, max_length=1)
+    date_joined = models.DateTimeField('Создан', auto_now_add=True)
+    is_active = models.BooleanField('Активность', default=True)
+    role = models.CharField('Роль', choices=Role.choices, max_length=1)
     gender = models.CharField('Пол', choices=Floor.choices, max_length=1)
 
-    objects = models.Manager()
+    objects = UserManager()
     patients = UserPatient()
     employees = UserEmployee()
 
+    EMAIL_FIELD = 'email'
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name', 'patronymic']
+    REQUIRED_FIELDS = []
 
     class Meta:
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 
+    def clean(self):
+        super().clean()
+        self.email = self.__class__.objects.normalize_email(self.email)
+
     def get_full_name(self):
         return f'{self.last_name} {self.first_name} {self.patronymic}'
 
+    def get_short_name(self):
+        return self.first_name
+
+    def email_user(self, subject, message, from_email=None, **kwargs):
+        send_mail(subject, message, from_email, [self.email], **kwargs)
+
     def __str__(self):
-        return f'{self.get_type_display()} | {self.last_name} | {self.first_name}'
+        return f'{self.get_role_display()} | {self.last_name} | {self.first_name}'
     
 
 class PatientType(models.Model):
@@ -164,6 +181,9 @@ class Schedule(models.Model):
         verbose_name = 'График работы'
         verbose_name_plural = 'График работы'
 
+    def __str__(self):
+        return f'{self.date} | {self.employee} | {self.shift}'
+
 
 class ServiceType(models.Model):
     name = models.CharField('Название', max_length=128, unique=True)
@@ -173,6 +193,9 @@ class ServiceType(models.Model):
     class Meta:
         verbose_name = 'Специализация'
         verbose_name_plural = 'Специализации'
+
+    def __str__(self):
+        return self.name
 
 
 class Service(models.Model):

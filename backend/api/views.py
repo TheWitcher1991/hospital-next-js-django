@@ -1,20 +1,44 @@
+import json
+from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
-from django.views.decorators.csrf import ensure_csrf_cookie, csrf_protect
-from django.views.decorators.http import require_POST
-from rest_framework.decorators import api_view
+from django.middleware.csrf import get_token
+from django.views.decorators.csrf import ensure_csrf_cookie
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
 from rest_framework import generics
+from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.authentication import SessionAuthentication
 
 from .models import *
 from .serializers import *
 
 
-@ensure_csrf_cookie
-def csrfView(request):
-    return JsonResponse({'detail': 'CSRF cookie set'})
+class CsrfView(APIView):
+    permission_classes = (AllowAny, )
+    authentication_classes = ()
+
+    @staticmethod
+    def get(request):
+        response = JsonResponse({'detail': 'CSRF cookie set'})
+        response['X-CSRFToken'] = get_token(request)
+        return response
+
+
+@api_view(['POST'])
+@permission_classes([AllowAny])
+def loginView(request):
+    data = json.loads(request.body)
+    email = data.get('email')
+    password = data.get('password')
+
+    user = authenticate(email=email, password=password)
+
+    if user is not None:
+        login(request, user)
+        return Response({"detail": "Success"})
 
 
 class ServiceTypeView(generics.ListAPIView):
     queryset = ServiceType.objects.all()
-    serializers_class = ServiceTypeSerializer
-    
+    serializer_class = ServiceTypeSerializer
