@@ -7,9 +7,9 @@ axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 
 // https://djangodoc.ru/3.2/ref/csrf/
 const get_csrf = async () => {
-    let response = await axios.get('http://localhost:8080/api/v1/csrf/')
-
-    return response.headers['X-CSRFToken']
+    // let response = await axios.get('http://localhost:8080/api/v1/csrf/')
+    // return response.headers['X-CSRFToken']
+    return ''
 }
 
 const api = axios.create({

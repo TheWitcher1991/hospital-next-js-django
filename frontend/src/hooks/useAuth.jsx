@@ -1,8 +1,8 @@
 import React, {useEffect, useState, useMemo} from 'react'
 import {jwtDecode} from 'jwt-decode'
-import {useNavigate} from 'react-router-dom'
+import {redirect} from 'react-router-dom'
 import PropTypes from 'prop-types'
-import {api} '../utils/axios'
+import {api} from '../utils/axios'
 
 const AuthContext = React.createContext(null)
 
@@ -11,16 +11,12 @@ export const AuthProvider = ({userData, children}) => {
     let [user, setUser] = useState(() => localStorage.getItem('token') ? jwtDecode(localStorage.getItem('token')) : null)
     let [loading, setLoading] = useState(true)
 
-    const navigate = useNavigate()
-
-    let csrf = async () => {
+    /*let csrf = async () => {
         let response = await axios.get('http://localhost:8080/api/csrf/')
         return response.headers['X-CSRFToken']
-    }
+    }*/
 
     let login = async (email, password, type) => {
-        e.preventDefault()
-
         let response = await api.post('/login', { email, password, type})
 
         let data = response.data.head
@@ -30,7 +26,7 @@ export const AuthProvider = ({userData, children}) => {
             setAuthToken(data)
             setUser(data)
             setLoading(true)
-            navigate('/')
+            redirect('/')
         }
     }
 
@@ -38,7 +34,7 @@ export const AuthProvider = ({userData, children}) => {
         localStorage.removeItem('token')
         setAuthToken(null)
         setUser(null)
-        navigate('/login')
+        redirect('/login')
     }
 
     /* let updateToken = async () => {
@@ -77,7 +73,7 @@ export const AuthProvider = ({userData, children}) => {
             logout,
             loading,
         }),
-        [user, loading])
+        [user, loading, authToken])
 
     return (
         <AuthContext.Provider value={context}>
