@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useMemo} from 'react'
+import React from 'react'
 // import {jwtDecode} from 'jwt-decode'
 // import {redirect} from 'react-router-dom'
 import PropTypes from 'prop-types'
@@ -9,8 +9,8 @@ const AuthContext = React.createContext({})
 export const AuthProvider = ({children}) => {
     // let [authToken, setAuthToken] = useState(() => localStorage.getItem('token') ? JSON.parse(localStorage.getItem('token')) : null)
     // let [user, setUser] = useState(() => localStorage.getItem('token') ? jwtDecode(localStorage.getItem('token')) : null)
-    const [isAuthenticated, setAuthenticated] = useState(false)
-    const [user, setUser] = useState({
+    const [isAuthenticated, setAuthenticated] = React.useState(false)
+    const [user, setUser] = React.useState({
         csrf: '',
         data: {}
     })
@@ -47,11 +47,11 @@ export const AuthProvider = ({children}) => {
             .catch(err => console.log(err))
     }
 
-    useEffect(() => {
+    React.useEffect(() => {
         authenticate()
     }, [authenticate])
 
-    let context = useMemo(
+    let context = React.useMemo(
         () => ({
             user,
             isAuthenticated,

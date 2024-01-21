@@ -13,6 +13,12 @@ const HeaderButton = () => {
                     <Link className='bth__active' to='/signup'><i className='mdi mdi-account-plus-outline'></i> Регистрация</Link>
                 </div>
             )}
+
+            {isAuthenticated && (
+                <div className='auth__button'>
+                    <Link to='/profile'><i className='mdi mdi-account'></i> Профиль</Link>
+                </div>
+            )}
         </div>
     )
 }

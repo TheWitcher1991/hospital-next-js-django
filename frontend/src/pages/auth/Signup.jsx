@@ -23,7 +23,8 @@ const Signup = () => {
                     </div>
                 </div>
 
-                <AuthInput name='oms' label='Номер ОМС' type='text' inputMode='numeric' maxLength='16' />
+                <AuthInput name='oms' label='Номер ОМС' type='text' inputMode='numeric' maxLength='16'
+                />
 
                 <div className='auth__label'>
                     <label htmlFor='surname'>Фамилия</label>
@@ -51,9 +52,6 @@ const Signup = () => {
                 </div>
 
                 <button type='button'>Продолжить</button>
-
-
-
 
                 <div className='exp__text'>Уже зарегистрировались? <Link to='/login'>Войти</Link></div>
             </form>

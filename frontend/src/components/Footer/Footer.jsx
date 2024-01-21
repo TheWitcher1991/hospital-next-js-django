@@ -10,7 +10,6 @@ const Footer = () => {
                         <Logo />
                         <div className='footer__img-slot'>
                             <img src='https://www.minobrnauki.gov.ru/local/templates/minobr/images/dest/logo-mobile.svg' alt='' />
-                            
                         </div>
                     </div>
                 </div>
