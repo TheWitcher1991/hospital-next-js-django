@@ -1,31 +1,29 @@
 from pathlib import Path
 from datetime import timedelta
-import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+SECRET_KEY = 'django-insecure-o)wbv+7edm(6)conv+#bq+od&*p0!y=61*p2eqwls91c)3&qoi'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get('DJANGO_DEBUG')
+DEBUG = True
 
 if DEBUG:
     ALLOWED_HOSTS = ['*']
 else:
-    ALLOWED_HOSTS = [os.environ.get('DJANGO_DEBUG'), os.environ.get('CLIENT_DOMAIN')]
+    ALLOWED_HOSTS = ['http://localhost:8080', 'http://127.0.0.1:3000']
 
 
-DOMAIN_NAME = os.environ.get('BACKEND_DOMAIN')
+DOMAIN_NAME = 'http://localhost:8080'
 
 CORS_ORIGIN_ALLOW_ALL = False
-CORS_ORIGIN_WHITELIST = [os.environ.get('CLIENT_DOMAIN')]
-CSRF_TRUSTED_ORIGINS = [os.environ.get('CLIENT_DOMAIN')]
+CORS_ORIGIN_WHITELIST = ['http://127.0.0.1:3000']
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1:3000']
 CORS_EXPOSE_HEADERS = ['Content-Type', 'X-CSRFToken']
 CORS_ALLOW_CREDENTIALS = True
 
@@ -108,7 +106,7 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.SessionAuthentication',
-        # 'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
         # 'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
@@ -194,7 +192,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-AUTH_USER_MODEL = os.environ.get('DJANGO_USER_MODEL')
+AUTH_USER_MODEL = 'api.User'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

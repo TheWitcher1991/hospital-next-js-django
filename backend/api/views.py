@@ -12,6 +12,7 @@ from rest_framework.authentication import SessionAuthentication
 
 from .models import *
 from .serializers import *
+from .permissions import *
 
 
 class CsrfView(APIView):
@@ -20,8 +21,9 @@ class CsrfView(APIView):
 
     @staticmethod
     def get(request):
-        response = JsonResponse({'detail': 'CSRF cookie set'})
-        response['X-CSRFToken'] = get_token(request)
+        token = get_token(request)
+        response = JsonResponse({'detail': token})
+        response['X-CSRFToken'] = token
         return response
 
 

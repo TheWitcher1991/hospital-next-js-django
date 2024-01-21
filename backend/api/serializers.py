@@ -10,7 +10,11 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = '__all__'
         
-        
+    def create(self, validated_data):
+        user = User.objects.create_user(**validated_data)
+        return user
+
+
 class PatientTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = PatientType
@@ -18,8 +22,8 @@ class PatientTypeSerializer(serializers.ModelSerializer):
 
 
 class PatientSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
-    patient_type = PatientTypeSerializer()
+    user = UserSerializer(read_only=True)
+    patient_type = PatientTypeSerializer(read_only=True)
     
     class Meta:
         model = Patient
@@ -35,7 +39,7 @@ class PatientPhoneSerializer(serializers.ModelSerializer):
 
 
 class PatientSignatureSerializer(serializers.ModelSerializer):
-    patient = PatientSerializer()
+    patient = PatientSerializer(read_only=True)
     
     class Meta:
         model = PatientSignature
@@ -61,9 +65,9 @@ class ShiftSerializer(serializers.ModelSerializer):
         
 
 class EmployeeSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
-    cabinet = CabinetSerializer()
-    position = PositionSerializer()
+    user = UserSerializer(read_only=True)
+    cabinet = CabinetSerializer(read_only=True)
+    position = PositionSerializer(read_only=True)
     
     class Meta:
         model = Employee
@@ -71,8 +75,8 @@ class EmployeeSerializer(serializers.ModelSerializer):
 
 
 class ScheduleSerializer(serializers.ModelSerializer):
-    shift = ShiftSerializer()
-    employee = EmployeeSerializer()
+    shift = ShiftSerializer(read_only=True)
+    employee = EmployeeSerializer(read_only=True)
     
     class Meta:
         model = Schedule
@@ -86,8 +90,8 @@ class ServiceTypeSerializer(serializers.ModelSerializer):
         
 
 class ServiceSerializer(serializers.ModelSerializer):
-    employee = EmployeeSerializer()
-    service_type = ServiceTypeSerializer()
+    employee = EmployeeSerializer(read_only=True)
+    service_type = ServiceTypeSerializer(read_only=True)
     
     class Meta:
         model = Service
@@ -95,8 +99,8 @@ class ServiceSerializer(serializers.ModelSerializer):
         
 
 class PatientCartSerializer(serializers.ModelSerializer):
-    patient = PatientSerializer()
-    service = ServiceSerializer()
+    patient = PatientSerializer(read_only=True)
+    service = ServiceSerializer(read_only=True)
     status = serializers.CharField(source='get_status_display')
     
     class Meta:
@@ -105,7 +109,7 @@ class PatientCartSerializer(serializers.ModelSerializer):
        
 
 class AgreementSerializer(serializers.ModelSerializer):
-    patient_cart = PatientCartSerializer()
+    patient_cart = PatientCartSerializer(read_only=True)
 
     class Meta:
         model = Agreement
@@ -113,7 +117,7 @@ class AgreementSerializer(serializers.ModelSerializer):
 
 
 class TalonSerializer(serializers.ModelSerializer):
-    agreement = AgreementSerializer()
+    agreement = AgreementSerializer(read_only=True)
 
     class Meta:
         model = Talon

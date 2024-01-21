@@ -1,9 +1,20 @@
 import React from 'react'
-import {redirect} from 'react-router-dom'
+import {Navigate} from 'react-router-dom'
+import Helmet from 'react-helmet'
+import {useAuth} from '@/hooks/useAuth'
 
 const Logout = () => {
+    const {logout} = useAuth()
+
+    logout()
+
     return (
-        <> {redirect('/login')} </>
+        <>
+            <Helmet>
+                <title>Выход - ЕМИАС</title>
+            </Helmet>
+            <Navigate to='/login' />
+        </>
     )
 }
 

@@ -1,0 +1,120 @@
+.auth__wrapper
+    background: $white
+    border: 1px solid $black
+    width: 460px
+    border-radius: 20px
+    margin: 0 auto
+    padding: 40px 40px
+
+.auth__form
+    h1
+        text-align: center
+        font-weight: 500
+        margin: 0 0 20px 0
+
+    button
+        color: $black
+        background: $focus
+        font-size: 15px
+        text-align: center
+        font-weight: 600
+        cursor: pointer
+        height: 40px
+        border-radius: 20px
+        width: 100%
+        display: flex
+        align-items: center
+        justify-content: center
+        transition: all 0.2s linear
+        border: 1px solid $black
+        margin-top: 26px
+
+        &:hover
+            background: $black
+            color: $white
+
+.exp__text
+    text-wrap: balance
+    display: block
+    margin-top: 20px
+    font-size: 15px
+    text-align: center
+
+    a
+        color: $color
+        text-decoration: underline
+        font-weight: 500    
+
+.auth__choice
+    display: flex
+    align-items: center
+    justify-content: space-between
+    margin: 0 0 26px 0
+    background: $black
+    padding: 4px
+    border-radius: 15px
+
+    div
+        width: 100%
+        height: 38px
+        color: $white
+        border-radius: 15px
+        border: 1px solid $black
+        display: flex
+        align-items: center
+        justify-content: center
+        font-weight: 500
+        font-size: 16px
+        cursor: pointer
+        transition: all 0.2s linear
+        
+        &:hover
+            background: $focus
+            color: $black
+        
+        &.active
+            background: $white
+            color: $black
+        
+        i
+            margin-right: 8px
+            font-size: 24px
+
+        &:first-child
+            margin-right: 6px
+
+.auth__label
+    position: relative
+    width: 100%
+    background: $white
+    font-weight: 400
+    margin: 0 0 20px 0
+    display: block
+    
+    label
+        font-size: 15px
+        color: $black
+    
+        &::after
+            content: '*'
+            margin: 0 0 0 5px
+        
+    
+    input
+        background: none
+        width: 100%
+        outline: none
+        margin-top: 3px
+        font-size: 16px
+        font-weight: 500
+        color: $black
+        padding: 0 8px
+        height: 36px
+        border-radius: 10px
+        background: $main
+        border: 1px solid $black
+        transition: all 0.2s linear
+
+        &:focus, &:active
+            background: $white
+       

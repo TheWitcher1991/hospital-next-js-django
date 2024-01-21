@@ -1,43 +1,42 @@
-import React, {lazy, Suspense, Fragment} from 'react'
+import React, {lazy, Suspense} from 'react'
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom'
 
-import Loader from './components/Loader'
-import ProtectedRoute from './ProtectedRoute'
-import AllowRoute from './AllowRoute'
+import '@/styles/index.sass'
 
-const MainLayout = lazy(() => import('./layouts/MainLayout'))
-const AuthLayout = lazy(() => import('./layouts/AuthLayout'))
+import Loader from '@/components/Loader'
+import ProtectedRoute from '@/routes/ProtectedRoute'
+import AllowRoute from '@/routes/AllowRoute'
 
-const Login = lazy(() => import('./pages/auth/Login'))
-const Signup = lazy(() => import('./pages/auth/Signup'))
-const Logout = lazy(() => import('./pages/auth/Logout'))
+const MainLayout = lazy(() => import('@/layouts/MainLayout'))
+const AuthLayout = lazy(() => import('@/layouts/AuthLayout'))
 
+const Login = lazy(() => import('@/pages/auth/Login'))
+const Signup = lazy(() => import('@/pages/auth/Signup'))
+const Logout = lazy(() => import('@/pages/auth/Logout'))
 
 const App = () => {
     return (
         <Router>
             <Suspense fallback={<Loader />}>
-                <Fragment>
-                    <Routes>
-                        <Route path='/' element={
-                            <AllowRoute>
-                                <AuthLayout />
-                            </AllowRoute>
-                        }>
-                            <Route path='login' element={<Login />} />
-                            <Route path='signup' element={<Signup />} />
-                            <Route path='logout' element={<Logout />} />
-                        </Route>
+                <Routes>
+                    <Route path='/' element={
+                        <AllowRoute>
+                            <AuthLayout />
+                        </AllowRoute>
+                    }>
+                        <Route path='login' element={<Login />} />
+                        <Route path='signup' element={<Signup />} />
+                        <Route path='logout' element={<Logout />} />
+                    </Route>
 
-                        <Route path='/' element={
-                            <ProtectedRoute>
-                                <MainLayout />
-                            </ProtectedRoute>
-                        }>
-                            <Route index />
-                        </Route>
-                    </Routes>
-                </Fragment>
+                    <Route path='/' element={
+                        <ProtectedRoute>
+                            <MainLayout />
+                        </ProtectedRoute>
+                    }>
+                        <Route index />
+                    </Route>
+                </Routes>
             </Suspense>
         </Router>
     )

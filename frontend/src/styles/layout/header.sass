@@ -1,0 +1,57 @@
+#header
+    width: 100%
+    padding: 0
+    margin: 0
+    z-index: 10000
+    background-color: $white
+    position: fixed
+    left: 0
+    top: 0
+    border-bottom: $border-header
+
+    nav
+        padding: 16px 0
+        width: 100%
+        display: flex
+        align-items: center
+        justify-content: space-between
+
+    .auth__button
+        display: flex
+        align-items: center
+    
+        > a 
+            color: $color
+            font-size: 15px
+            margin: 0 0 0 20px
+            font-weight: 600
+            cursor: pointer
+            padding: 3px 14px
+            border-radius: 20px
+            display: flex
+            align-items: center
+            transition: all .2s linear
+            
+            &.bth__active
+                background: $focus
+                color: $black
+                border: 1px solid $black
+            
+            &:hover
+                background: $black
+                color: $white
+
+            i
+                font-size: 19px
+                margin-right: 6px
+
+.global__logo
+    display: flex
+    align-items: center
+    font-size: 22px
+    font-weight: 500
+    letter-spacing: 2px
+
+    i
+        margin-right: 6px
+        font-size: 25px

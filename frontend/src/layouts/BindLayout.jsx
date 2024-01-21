@@ -4,11 +4,13 @@ import Footer from '../components/Footer/Footer'
 
 const BindLayout = ({children}) => {
     return (
-        <main className='wrapper'>
+        <>
             <Header />
-            {children}
+            <div className='context'>
+                {children}
+            </div>
             <Footer />
-        </main>
+        </>
     )
 }
 

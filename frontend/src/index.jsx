@@ -1,17 +1,13 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import reportWebVitals from './webvitals/reportWebVitals'
-import App from './App'
-
-import {AuthProvider} from './hooks/useAuth'
-
-let user = localStorage.getItem('token')
-user = JSON.parse(user)
+import {AuthProvider} from '@/hooks/useAuth'
+import * as serviceWorker from '@/serviceWorker'
+import App from '@/App'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-    <AuthProvider userData={user}>
+    <AuthProvider>
         <App/>
     </AuthProvider>
 )
 
-reportWebVitals()
+serviceWorker.register()

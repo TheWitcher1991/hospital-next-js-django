@@ -5,7 +5,12 @@ import BindLayout from './BindLayout'
 const AuthLayout = () => {
     return (
         <BindLayout>
-            <Outlet />
+            <div className='margin-top'></div>
+            <div className='container'>
+                <div className='auth__wrapper'>
+                    <Outlet />
+                </div>
+            </div>
         </BindLayout>
     )
 }

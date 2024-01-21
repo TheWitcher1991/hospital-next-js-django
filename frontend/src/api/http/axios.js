@@ -6,18 +6,17 @@ axios.defaults.xsrfCookieName = 'csrftoken'
 axios.defaults.xsrfHeaderName = 'X-CSRFToken'
 
 // https://djangodoc.ru/3.2/ref/csrf/
-const get_csrf = async () => {
-    // let response = await axios.get('http://localhost:8080/api/v1/csrf/')
-    // return response.headers['X-CSRFToken']
-    return ''
+const csrf = async () => {
+    let {headers} = await axios.get('http://localhost:8080/api/v1/csrf/')
+    return headers.get('X-CSRFToken')
 }
 
 const api = axios.create({
     baseURL: 'http://localhost:8080/api/v1',
     headers: {
         'Content-Type':'application/json',
-        'X-CSRFToken': get_csrf()
+        'X-CSRFToken': csrf()
     }
 })
 
-export { api, get_csrf }
+export {api, csrf}

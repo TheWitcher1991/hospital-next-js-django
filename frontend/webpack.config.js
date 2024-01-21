@@ -9,7 +9,7 @@ const production = process.env.NODE_ENV === 'production'
 module.exports = {
     entry: [
         './src/index.jsx',
-        './src/styles/index.scss'
+        './src/styles/index.sass'
     ],
     output: {
         path: path.resolve(__dirname, './dist'),
