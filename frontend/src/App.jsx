@@ -14,6 +14,8 @@ const Login = lazy(() => import('@/pages/auth/Login'))
 const Signup = lazy(() => import('@/pages/auth/Signup'))
 const Logout = lazy(() => import('@/pages/auth/Logout'))
 
+const NotFound = lazy(() => import('@/pages/NotFound'))
+
 const App = () => {
     return (
         <Router>
@@ -36,6 +38,8 @@ const App = () => {
                     }>
                         <Route index />
                     </Route>
+
+                    <Route path='*' element={<NotFound />} />
                 </Routes>
             </Suspense>
         </Router>

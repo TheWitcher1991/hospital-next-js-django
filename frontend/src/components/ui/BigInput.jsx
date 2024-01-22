@@ -1,12 +1,12 @@
 import React from 'react'
 
-const AuthInput = ({label, name, ...rest}) => {
+const BigInput = ({label, name, styleLabel={}, ...rest}) => {
     return (
-        <div className='auth__label'>
+        <div style={styleLabel} className='auth__label'>
             <label htmlFor={name}>{label}</label>
             <input id={name} name={name} {...rest} />
         </div>
     )
 }
 
-export default AuthInput
+export default BigInput

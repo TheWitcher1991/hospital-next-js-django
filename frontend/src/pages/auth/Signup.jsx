@@ -1,7 +1,8 @@
 import React from 'react'
 import Helmet from 'react-helmet'
 import {Link} from 'react-router-dom'
-import AuthInput from '@/pages/auth/components/AuthInput'
+import ButtonFull from '@/components/ui/ButtonFull'
+import BigInput from '@/components/ui/BigInput'
 
 const Signup = () => {
     return (
@@ -23,7 +24,7 @@ const Signup = () => {
                     </div>
                 </div>
 
-                <AuthInput name='oms' label='Номер ОМС' type='text' inputMode='numeric' maxLength='16'
+                <BigInput name='oms' label='Номер ОМС' type='text' inputMode='numeric' maxLength='16'
                 />
 
                 <div className='auth__label'>
@@ -51,7 +52,7 @@ const Signup = () => {
                     с  <Link to='/'>Условиями использования</Link> и <Link to='/'>Политикой конфиденциальности</Link>
                 </div>
 
-                <button type='button'>Продолжить</button>
+                <ButtonFull name='Продолжить' />
 
                 <div className='exp__text'>Уже зарегистрировались? <Link to='/login'>Войти</Link></div>
             </form>

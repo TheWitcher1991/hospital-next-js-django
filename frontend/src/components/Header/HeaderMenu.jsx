@@ -4,7 +4,15 @@ import {useAuth} from '@/hooks/useAuth'
 import {patientRoutes, employeeRoutes} from '@/routes/routes'
 
 const HeaderMenu = () => {
-    const {isAuthenticated, user} = useAuth()
+    return (
+        <div className='header-menu'>
+            {patientRoutes.map(({id, path, name}) => {
+                return <Link to={path} tabIndex={id} key={Date.now()}>{name}</Link>
+            })}
+        </div>
+    )
+
+    /* const {isAuthenticated, user} = useAuth()
 
     if (isAuthenticated) {
         const {type} = user.data
@@ -22,7 +30,7 @@ const HeaderMenu = () => {
         )
     }
 
-    return <React.Fragment></React.Fragment>
+    return <React.Fragment></React.Fragment> */
 }
 
 export default HeaderMenu

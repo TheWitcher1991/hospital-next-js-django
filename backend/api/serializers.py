@@ -1,5 +1,47 @@
+from django.contrib.auth.password_validation import validate_password
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, AuthUser
 from rest_framework import serializers
+from rest_framework_simplejwt.tokens import Token
+
 from .models import *
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user: AuthUser) -> Token:
+        token = super().get_token(user)
+
+        token['email'] = user.email
+        token['first_name'] = user.first_name
+        token['last_name'] = user.last_name
+        token['patronymic'] = user.patronymic
+        token['age'] = user.age
+        token['date'] = user.date
+        token['date_joined'] = user.date_joined
+        token['role'] = user.role
+        token['gender'] = user.gender
+
+        return token
+
+
+class UserCreateSerializer(serializers.ModelSerializer):
+    password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
+
+    class Meta:
+        model = User
+        fields = '__all__'
+
+    def create(self, validated_data):
+        user = User.objects.create(**validated_data)
+        user.save()
+
+        if user.role == 'П':
+            patient = Patient.objects.create(user=user, **validated_data['patient'])
+            patient.save()
+        elif user.role == 'С':
+            employee = Employee.objects.create(user=user, **validated_data['employee'])
+            employee.save()
+
+        return user
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -9,10 +51,6 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = '__all__'
-        
-    def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
-        return user
 
 
 class PatientTypeSerializer(serializers.ModelSerializer):

@@ -1,12 +1,15 @@
-import React from 'react'
+import React, {useState} from 'react'
 import Helmet from 'react-helmet'
 import {Link, redirect} from 'react-router-dom'
-import AuthInput from '@/pages/auth/components/AuthInput'
+import CheckBox from '@/components/ui/CheckBox'
+import ButtonFull from '@/components/ui/ButtonFull'
+import BigInput from '@/components/ui/BigInput'
 import {useAuth} from '@/hooks/useAuth'
 
 const Login = () => {
-    const [email, setEmail] = React.useState('')
-    const [password, setPassword] = React.useState('')
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+    const [remember, setRemember] = useState(false)
     const {login} = useAuth()
 
     const handleLogin = e => {
@@ -25,17 +28,22 @@ const Login = () => {
             <form className='auth__form' action='' method='post'>
                 <h1>Авторизация</h1>
 
-                <AuthInput name='email' label='Email' type='text' inputMode='email'
+                <BigInput name='email' label='Email' type='text' inputMode='email'
                     onChange={e => setEmail(e.target.value)}
                     value={email}
                 />
 
-                <AuthInput name='password' label='Пароль' type='text'
+                <BigInput name='password' label='Пароль' type='text'
                     onChange={e => setPassword(e.target.value)}
                     value={password}
+                    styleLabel={{marginBottom: 6}}
                 />
 
-                <button type='button' onClick={handleLogin}>Войти</button>
+                <CheckBox label='Запомнить меня' name='remember' value='1'
+                    checked={remember} onChange={() => setRemember(!remember)}
+                />
+
+                <ButtonFull name='Войти' onClick={handleLogin} />
 
                 <div className='exp__text'>Не аккаунта? <Link to='/signup'>Регистрация</Link></div>
 

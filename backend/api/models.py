@@ -39,6 +39,9 @@ class User(AbstractUser, PermissionsMixin):
         verbose_name = 'Пользователь'
         verbose_name_plural = 'Пользователи'
 
+    def profile(self):
+        return Patient.objects.get(user=self) if self.role == 'П' else Employee.objects.get(user=self)
+
     def clean(self):
         super().clean()
         self.email = self.__class__.objects.normalize_email(self.email)

@@ -39,7 +39,7 @@ export const AuthProvider = ({children}) => {
     }
 
     const logout = () => {
-        api.get('/logout/')
+        api.post('/logout/')
             .then(async () => {
                 setUser({data: {}, csrf: await csrf()})
                 setAuthenticated(false)

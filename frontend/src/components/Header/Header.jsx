@@ -9,7 +9,7 @@ const Header = () => {
             <div className='container'>
                 <nav>
                     <Logo />
-                    <div>
+                    <div className='header__nav-menu'>
                         <HeaderMenu />
                         <HeaderButton />
                     </div>

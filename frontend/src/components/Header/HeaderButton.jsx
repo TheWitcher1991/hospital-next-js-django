@@ -9,8 +9,7 @@ const HeaderButton = () => {
         <div>
             {!isAuthenticated && (
                 <div className='auth__button'>
-                    <Link to='/login'><i className='mdi mdi-login'></i> Войти</Link>
-                    <Link className='bth__active' to='/signup'><i className='mdi mdi-account-plus-outline'></i> Регистрация</Link>
+                    <Link className='bth__active' to='/login'><i className='mdi mdi-login'></i> Авторизация</Link>
                 </div>
             )}
 
