@@ -5,6 +5,7 @@ from rest_framework_simplejwt.tokens import Token
 
 from .models import *
 
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user: AuthUser) -> Token:

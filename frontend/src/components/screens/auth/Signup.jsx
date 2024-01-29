@@ -1,8 +1,8 @@
 import React from 'react'
 import Helmet from 'react-helmet'
 import {Link} from 'react-router-dom'
-import ButtonFull from '@/components/ui/ButtonFull'
-import BigInput from '@/components/ui/BigInput'
+import ButtonFull from '@/components/ui/buttons/ButtonFull'
+import BigInput from '@/components/ui/fields/BigInput'
 
 const Signup = () => {
     return (

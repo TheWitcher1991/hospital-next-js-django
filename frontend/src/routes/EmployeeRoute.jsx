@@ -1,11 +1,12 @@
 import React from 'react'
-import NotFound from '@/components/NotFound'
-import {useAuth} from '@/hooks/useAuth'
+import {Outlet} from 'react-router-dom'
+import NotFound from '@/components/screens/NotFound'
+import useAuth from '@/hooks/useAuth'
 
 const EmployeeRoute = ({children}) => {
     const {isAuthenticated, user} = useAuth()
 
-    return isAuthenticated && user.data.type === 'С' ? children  : <NotFound />
+    return isAuthenticated && user.data.type === 'С' ? <Outlet /> : <NotFound />
 }
 
 export default EmployeeRoute

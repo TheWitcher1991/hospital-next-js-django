@@ -2,6 +2,7 @@ import json
 from django.contrib.auth import authenticate, login, logout
 from django.http import JsonResponse
 from django.middleware.csrf import get_token
+from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework import generics, versioning
@@ -25,42 +26,51 @@ class CsrfView(APIView):
     authentication_classes = ()
 
     @staticmethod
-    def get(request):
+    @method_decorator(ensure_csrf_cookie)
+    def get(self, request):
         token = get_token(request)
         response = JsonResponse({'detail': token})
         response['X-CSRFToken'] = token
         return response
 
 
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def loginView(request):
-    data = json.loads(request.body)
-    email = data.get('email')
-    password = data.get('password')
+class LoginView(APIView):
+    permission_classes = (AllowAny, )
+    authentication_classes = ()
 
-    user = authenticate(email=email, password=password)
+    @staticmethod
+    def get(self, request):
+        data = json.loads(request.body)
+        email = data.get('email')
+        password = data.get('password')
 
-    if user is not None:
-        login(request, user)
-        return Response({"detail": "Success"})
+        user = authenticate(email=email, password=password)
 
-
-@api_view(['POST'])
-@permission_classes([IsAuthenticated])
-def logoutView(request):
-    logout(request)
-    return JsonResponse({'detail': 'Successfully logged out.'})
+        if user is not None:
+            login(request, user)
+            return Response({"detail": "Success"})
 
 
-@api_view(['GET'])
-@permission_classes([AllowAny])
-@ensure_csrf_cookie
-def authenticateView(request):
-    if not request.user.is_authenticated:
-        return JsonResponse({'isAuthenticated': False})
+class LogoutView(APIView):
+    permission_classes = (IsAuthenticated, )
 
-    return JsonResponse({'isAuthenticated': True})
+    @staticmethod
+    def post(self, request):
+        logout(request)
+        return JsonResponse({'detail': 'Successfully logged out.'})
+
+
+class AuthenticateView(APIView):
+    permission_classes = (AllowAny, )
+    authentication_classes = ()
+
+    @staticmethod
+    @method_decorator(ensure_csrf_cookie)
+    def get(self, request):
+        if not request.user.is_authenticated:
+            return JsonResponse({'isAuthenticated': False})
+
+        return JsonResponse({'isAuthenticated': True})
 
 
 class ServiceTypeView(generics.ListAPIView):

@@ -23,7 +23,7 @@ class Model {
 export default class Service extends Model {
 
     constructor() {
-        super('/service');
+        super('/services');
     }
 
 }

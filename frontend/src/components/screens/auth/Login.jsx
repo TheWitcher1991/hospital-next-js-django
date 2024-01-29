@@ -1,10 +1,10 @@
 import React, {useState} from 'react'
 import Helmet from 'react-helmet'
 import {Link, redirect} from 'react-router-dom'
-import CheckBox from '@/components/ui/CheckBox'
-import ButtonFull from '@/components/ui/ButtonFull'
-import BigInput from '@/components/ui/BigInput'
-import {useAuth} from '@/hooks/useAuth'
+import CheckBox from '@/components/ui/fields/CheckBox'
+import ButtonFull from '@/components/ui/buttons/ButtonFull'
+import BigInput from '@/components/ui/fields/BigInput'
+import useAuth from '@/hooks/useAuth'
 
 const Login = () => {
     const [email, setEmail] = useState('')

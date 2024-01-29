@@ -1,7 +1,7 @@
 import React from 'react'
 import {Navigate, redirect} from 'react-router-dom'
 import Helmet from 'react-helmet'
-import {useAuth} from '@/hooks/useAuth'
+import useAuth from '@/hooks/useAuth'
 
 const Logout = () => {
     const {logout} = useAuth()

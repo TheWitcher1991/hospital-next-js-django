@@ -5,7 +5,7 @@ export const register = config => {
                 navigator.serviceWorker.register('./src/sw.js')
                     .then(() => navigator.serviceWorker.ready.then(worker => {
                         worker.sync.register('sync')
-                        console.log('This web app is being served cache-first by a service worker')
+                        console.log('This web app is being served cache-first by a services worker')
                     }))
                     .catch((err) => console.log(err))
             })
