@@ -190,6 +190,7 @@ class Schedule(models.Model):
 
 class ServiceType(models.Model):
     name = models.CharField('Название', max_length=128, unique=True)
+    ico = models.CharField('Иконка mdi-icons', max_length=128, unique=True)
 
     objects = models.Manager()
 

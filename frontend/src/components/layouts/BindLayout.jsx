@@ -1,6 +1,6 @@
 import React from 'react'
-import Header from '../ui/heading/Header'
-import Footer from '../ui/heading/Footer'
+import Header from '@/components/ui/heading/Header'
+import Footer from '@/components/ui/heading/Footer'
 
 const BindLayout = ({children}) => {
     return (

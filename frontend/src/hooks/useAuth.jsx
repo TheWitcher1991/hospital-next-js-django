@@ -1,10 +1,9 @@
 import React from 'react'
-import AuthProvider from '@/providers/AuthProvider'
+import {AuthContext} from '@/providers/AuthProvider'
 
-const useAuth = () => React.useContext(AuthProvider)
+const useAuth = () => React.useContext(AuthContext)
 
 export default useAuth
-
 
 /*let csrf = async () => {
         let response = await axios.get('http://localhost:8080/api/csrf/')

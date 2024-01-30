@@ -1,6 +1,6 @@
 import React from 'react'
 import {Link} from 'react-router-dom'
-import {useAuth} from '@/hooks/useAuth'
+import useAuth from '@/hooks/useAuth'
 import {patientRoutes, employeeRoutes} from '@/routes/routes'
 
 const HeaderMenu = () => {

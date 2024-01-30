@@ -4,7 +4,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {csrf, api} from '@/api/http/axios'
 
-const AuthContext = React.createContext({})
+export const AuthContext = React.createContext({})
 
 export const AuthProvider = ({children}) => {
     // let [authToken, setAuthToken] = useState(() => localStorage.getItem('token') ? JSON.parse(localStorage.getItem('token')) : null)
@@ -71,5 +71,3 @@ export const AuthProvider = ({children}) => {
 AuthProvider.propTypes = {
     children: PropTypes.any
 }
-
-export default AuthProvider

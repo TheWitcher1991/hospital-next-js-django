@@ -1,6 +1,6 @@
 import React from 'react'
 import {Outlet} from 'react-router-dom'
-import BindLayout from './BindLayout'
+import BindLayout from '@/components/layouts/BindLayout'
 
 const AuthLayout = () => {
     return (

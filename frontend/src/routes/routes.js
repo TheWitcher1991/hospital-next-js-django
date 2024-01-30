@@ -1,5 +1,5 @@
 export const patientRoutes = [
-    { id: 1, path: '/services', name: 'Услуги' },
+    { id: 1, path: '/service', name: 'Услуги' },
     { id: 2, path: '/talon', name: 'Талоны' },
     { id: 3, path: '/pay', name: 'Платежи' },
     { id: 4, path: '/medcard', name: 'Медкарта' },

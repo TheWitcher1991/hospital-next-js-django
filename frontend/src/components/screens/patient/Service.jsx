@@ -1,7 +1,11 @@
 import React from 'react'
+import Helmet from 'react-helmet'
+import ServiceType from '@/api/services/ServiceType.service'
 
 const Service = () => {
-    
+
+    let serviceTypes = ServiceType.all()
+
     const serviceType = [
         {ico: 'mdi mdi-arm-flex', name: 'Профилактические'},
         {ico: 'mdi mdi-account-tie', name: 'Экспертные'},
@@ -12,9 +16,21 @@ const Service = () => {
         {ico: 'mdi mdi-dna', name: 'Диагностические'},
         {ico: 'mdi mdi-car-connected', name: 'Транспортные'},
     ]
-    
+
+    const popularService = [
+        {ico: 'mdi mdi-baby-face', name: 'Скрининг', price: 1200},
+        {ico: 'mdi mdi-needle', name: 'Вакцинация', price: 1400},
+        {ico: 'mdi mdi-skull-scan', name: 'Рентген', price: 1600},
+        {ico: 'mdi mdi-hospital-box', name: 'Реабилитация', price: 2400},
+        {ico: 'mdi mdi-doctor', name: 'Вызов врача на дом', price: 300},
+        {ico: 'mdi mdi-diabetes', name: 'Донорство', price: 500},
+    ]
+
     return (
         <div className='service__page'>
+            <Helmet>
+                <title>Услуги - ЕМИАС</title>
+            </Helmet>
             <div className='service__type-wrap'>
                 <div className='container'>
                     <div className='service__type-list'>
@@ -38,12 +54,20 @@ const Service = () => {
                     </div>
                 </div>
             </div>
-            
+
             <div className='container'>
                 <div className='page__section'>
                     <div className='page__section-title'>Популярные услуги</div>
-                    <div className='page__section-content'>
-                        
+                    <div className='page__section-content service__popular'>
+                        {popularService.map(({ico, name, price}) => {
+                            return (
+                                <div key={Date.now()}>
+                                    <i className={ico}></i>
+                                    <span>{name}</span>
+                                    <p>{price} руб.</p>
+                                </div>
+                            )
+                        })}
                     </div>
                 </div>
             </div>

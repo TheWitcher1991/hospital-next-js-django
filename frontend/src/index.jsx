@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import AuthProvider from '@/providers/AuthProvider'
+import {AuthProvider} from '@/providers/AuthProvider'
 import * as serviceWorker from '@/serviceWorker'
 import App from '@/App'
 
