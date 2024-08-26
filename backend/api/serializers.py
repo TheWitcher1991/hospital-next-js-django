@@ -1,11 +1,10 @@
 from django.contrib.auth.password_validation import validate_password
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer, AuthUser
 from rest_framework import serializers
-from rest_framework_simplejwt.tokens import Token
 
 from .models import *
 
 
+"""
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user: AuthUser) -> Token:
@@ -22,6 +21,7 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         token['gender'] = user.gender
 
         return token
+"""
 
 
 class UserCreateSerializer(serializers.ModelSerializer):
