@@ -16,13 +16,16 @@
     "react-redux": "^9.1.2"
   },
   "devDependencies": {
+    "@next/eslint-plugin-next": "^14.2.6",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@typescript-eslint/eslint-plugin": "^8.3.0",
     "autoprefixer": "^10.4.20",
     "cssnano": "^7.0.5",
     "eslint": "^8",
     "eslint-config-next": "14.2.6",
+    "eslint-config-prettier": "^9.1.0",
     "postcss": "^8.4.41",
     "postcss-import": "^16.1.0",
     "postcss-mixins": "^10.0.1",

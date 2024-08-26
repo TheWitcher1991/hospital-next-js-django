@@ -1,0 +1,21 @@
+:root[theme="light"] {
+    --font: normal 16px 'Jost', sans-serif;
+    --font-family: 'Jost', sans-serif;
+}
+
+:root[theme="light"] {
+    --color-black: #111111;
+    --color-white: #FFFFFFF;
+    --color-accent: #82ffac;
+    --color-body: #f2f2f2;
+    --color-link: #1842E0;
+    --color-primary: #006fee;
+    --color-success: #32bb71;
+    --color-warning: #f6743e;
+    --color-error: #d42525;
+    --color-danger: #d42525;
+}
+
+:root[theme="light"] {
+    --container-default-width: 1150px
+}

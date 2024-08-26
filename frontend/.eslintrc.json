@@ -1,3 +1,17 @@
 {
-  "extends": "next/core-web-vitals"
+  "env": {
+    "node": true,
+    "es6": true,
+    "browser": true
+  },
+  "extends": [
+    "next",
+    "next/core-web-vitals",
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "plugin:@next/next/recommended"
+  ],
+  "plugins": [
+    "@typescript-eslint"
+  ]
 }

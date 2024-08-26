@@ -1,0 +1,13 @@
+@define-mixin base-card {
+    border: 1px solid var(--primary-border-color);
+    box-shadow: var(--shadow-lk-div);
+    background: var(--color-fg-white);
+    border-radius: 20px;
+    height: fit-content;
+}
+
+@define-mixin content-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

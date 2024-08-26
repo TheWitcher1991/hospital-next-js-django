@@ -1,3 +1,5 @@
-export const NEXT_APP_ACTIONS = {
+import { accountActions } from '@/models/account'
 
+export const AppActions = {
+	...accountActions,
 }
