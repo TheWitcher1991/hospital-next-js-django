@@ -1,0 +1,31 @@
+[tool.poetry]
+name = "hospital-next-js-django"
+version = "1.0.0"
+description = "backend hospital-next-js-django"
+authors = ["TheWitcher1991 <alikzoy@gmail.com>"]
+license = "GPL-3.0"
+readme = "README.MD"
+repository = "https://github.com/TheWitcher1991/hospital-next-js-django"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+celery = "5.3.6"
+Django = "4.2.15"
+django-cors-headers = "4.3.1"
+django-debug-toolbar = "4.3.0"
+django-environ = "0.11.2"
+django-filter = "24.1"
+django-redis = "5.4.0"
+django-redisboard = "8.4.0"
+djangorestframework = "3.15.2"
+flake8 = "7.0.0"
+gunicorn = "22.0.0"
+pillow = "10.3.0"
+psycopg2 = "2.9.9"
+drf-spectacular = "^0.27.2"
+pyjwt = "^2.9.0"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
