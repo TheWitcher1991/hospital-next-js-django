@@ -1,0 +1,50 @@
+.skeleton {
+    cursor: default;
+    display: block;
+    overflow: hidden;
+    position: relative;
+    background: linear-gradient(100deg, #e4e4e7 30%, #d4d4d8 50%, #e4e4e7 70%);
+    background-size: 400%;
+    animation: _1J0cNeRIbH 1.5s ease-in-out infinite;
+}
+
+.skeleton__white {
+    background: linear-gradient(100deg, #fff 30%, #d4d4d8 50%, #fff 70%);
+    background-size: 400%;
+}
+
+@keyframes _1J0cNeRIbH {
+    0% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
+}
+
+@-webkit-keyframes _1J0cNeRIbH {
+    0% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
+}
+
+@-moz-keyframes _1J0cNeRIbH {
+    0% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
+}
+
+@-o-keyframes _1J0cNeRIbH {
+    0% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0 50%;
+    }
+}

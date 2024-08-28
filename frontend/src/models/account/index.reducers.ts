@@ -1,9 +1,9 @@
-import { AccountState } from '@/models/account/types'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { AccountState } from '@/models/account/index.types'
 import {
 	loadStateFromLocalStorage,
 	saveStateToLocalStorage,
-} from '@/models/account/storage'
+} from '@/models/account/index.storage'
 
 const initialState: Nullable<Partial<AccountState>> =
 	loadStateFromLocalStorage()

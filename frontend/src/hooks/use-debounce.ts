@@ -1,3 +1,5 @@
+'use client'
+
 import { useCallback, useRef } from 'react'
 
 export const useDebounce = <T extends (...args: never[]) => ReturnType<T>>(

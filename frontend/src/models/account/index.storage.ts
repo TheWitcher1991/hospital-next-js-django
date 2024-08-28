@@ -1,4 +1,4 @@
-import { AccountState } from '@/models/account'
+import { AccountState } from '@/models/account/index.types'
 
 export const accountStorageKey = 'accountState'
 

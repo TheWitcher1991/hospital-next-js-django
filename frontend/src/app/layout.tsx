@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import { Jost } from 'next/font/google'
-import '@/shared/styles/global.css'
+import '@/shared/css/global.css'
 import { ReactNode } from 'react'
 import { Provider } from 'react-redux'
 import { store } from '@/store'
@@ -21,7 +21,7 @@ export default function RootLayout({
 	return (
 		<html lang="ru">
 			<body className={inter.className}>
-				<Provider store={store}>{children}</Provider>
+				<Provider store={store()}>{children}</Provider>
 			</body>
 		</html>
 	)
