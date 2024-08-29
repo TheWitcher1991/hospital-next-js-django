@@ -18,8 +18,8 @@
 }
 
 :root[theme="light"] {
-    --border-radius-lg: 999px;
-    --border-radius-md: 16px;
+    --border-radius-lg: 20px;
+    --border-radius-md: 15px;
     --border-radius-sm: 8px;
 }
 

@@ -1,0 +1,26 @@
+.tooltip {
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    min-width: max-content;
+}
+
+.tooltip__label {
+    color: var(--color-white);
+    background-color: var(--color-black);
+    text-align: center;
+    position: absolute;
+    z-index: 100;
+    padding: 0.25em 0.625rem;
+    border-radius: 10px;
+    font-weight: 400;
+    font-size: 0.875rem;
+    max-width: 20rem;
+    box-shadow:
+            0 4px 6px -1px rgba(0, 0, 0, 0.1),
+            0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: opacity 0.1s ease-in-out;
+    top: 100%;
+    margin-top: 0.5em;
+    white-space: nowrap;
+}

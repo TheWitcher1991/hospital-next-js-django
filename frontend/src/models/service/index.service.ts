@@ -1,6 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react'
 import { fetchCoreQuery } from '@/shared/libs'
-import { IService } from '@/models/service/types/service'
+import { IService } from '@/models/service/index.types'
 
 export const ServiceApi = createApi({
 	reducerPath: 'serviceApi',
@@ -14,7 +14,11 @@ export const ServiceApi = createApi({
 			query: () => '',
 			providesTags: ['services'],
 		}),
+		getServiceById: build.query<IService, number>({
+			query: (id) => `${id}/`,
+			providesTags: (result, error, { id }) => [{ type: 'services', id }],
+		}),
 	}),
 })
 
-export const { useGetServicesQuery } = ServiceApi
+export const { useGetServicesQuery, useGetServiceByIdQuery } = ServiceApi
