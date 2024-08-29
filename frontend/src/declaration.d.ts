@@ -1,58 +1,56 @@
 declare module '.module.css'
 
 declare global {
+	type EmptyObject = Record<string, never>
 
-    type EmptyObject = Record<string, never>
+	type Nullable<T> = T | null
 
-    type Nullable<T> = T | null
+	type LiteralUnion<T extends U, U> = T | (U & Record<any, any>)
 
-    type LiteralUnion<T extends U, U> = T | (U & Record<any, any>)
+	export interface ListResponse<T> {
+		count: number
+		pages: number
+		next: Nullable<string>
+		previous: Nullable<string>
+		results: T[] | []
+	}
 
-    export interface ListResponse<T> {
-        count: number
-        pages: number
-        next: Nullable<string>
-        previous: Nullable<string>
-        results: T[] | []
-    }
+	export interface PaginationOptions {
+		page: number
+		page_size: number
+	}
 
-    export interface PaginationOptions {
-        page: number
-        page_size: number
-    }
+	interface ChildrenProps {
+		children: React.ReactNode
+	}
 
-    interface ChildrenProps {
-        children: React.ReactNode
-    }
+	type DetailedDivProps = React.DetailedHTMLProps<
+		React.ButtonHTMLAttributes<HTMLDivElement>,
+		HTMLDivElement
+	>
 
-    type DivProps = React.DetailedHTMLProps<
-        React.ButtonHTMLAttributes<HTMLDivElement>,
-        HTMLDivElement
-    >
+	type DetailedButtonProps = React.DetailedHTMLProps<
+		React.ButtonHTMLAttributes<HTMLButtonElement>,
+		HTMLButtonElement
+	>
 
-    type ButtonProps = React.DetailedHTMLProps<
-        React.ButtonHTMLAttributes<HTMLButtonElement>,
-        HTMLButtonElement
-    >
+	type DetailedInputProps = React.DetailedHTMLProps<
+		React.InputHTMLAttributes<HTMLInputElement>,
+		HTMLInputElement
+	>
 
-    type InputProps = React.DetailedHTMLProps<
-        React.InputHTMLAttributes<HTMLInputElement>,
-        HTMLInputElement
-    >
+	type DetailedSelectProps = React.DetailedHTMLProps<
+		React.SelectHTMLAttributes<HTMLSelectElement>,
+		HTMLSelectElement
+	>
 
-    type SelectProps = React.DetailedHTMLProps<
-        React.SelectHTMLAttributes<HTMLSelectElement>,
-        HTMLSelectElement
-    >
+	type DetailedLabelProps = React.DetailedHTMLProps<
+		React.LabelHTMLAttributes<HTMLLabelElement>,
+		HTMLLabelElement
+	>
 
-    type LabelProps = React.DetailedHTMLProps<
-        React.LabelHTMLAttributes<HTMLLabelElement>,
-        HTMLLabelElement
-    >
-
-    type TextareaProps = React.DetailedHTMLProps<
-        React.TextareaHTMLAttributes<HTMLTextAreaElement>,
-        HTMLTextAreaElement
-    >
-
+	type DetailedTextareaProps = React.DetailedHTMLProps<
+		React.TextareaHTMLAttributes<HTMLTextAreaElement>,
+		HTMLTextAreaElement
+	>
 }

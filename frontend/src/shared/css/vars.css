@@ -1,21 +1,40 @@
 :root[theme="light"] {
-    --font: normal 16px 'Jost', sans-serif;
-    --font-family: 'Jost', sans-serif;
+    --font:        normal 16px '__Jost_54b096', '__Jost_Fallback_54b096', sans-serif;
+    --font-family: '__Jost_54b096', '__Jost_Fallback_54b096', sans-serif;
 }
 
 :root[theme="light"] {
-    --color-black: #111111;
-    --color-white: #FFFFFFF;
-    --color-accent: #82ffac;
-    --color-body: #f2f2f2;
-    --color-link: #1842E0;
+    --color:         #0b1f33;
+    --color-black:   #111111;
+    --color-white:   #FFFFFF;
+    --color-accent:  #82ffac;
+    --color-body:    #f2f2f2;
+    --color-link:    #1842E0;
     --color-primary: #006fee;
     --color-success: #32bb71;
     --color-warning: #f6743e;
-    --color-error: #d42525;
-    --color-danger: #d42525;
+    --color-error:   #d42525;
+    --color-danger:  #d42525;
 }
 
 :root[theme="light"] {
-    --container-default-width: 1150px
+    --border-radius-lg: 999px;
+    --border-radius-md: 16px;
+    --border-radius-sm: 8px;
+}
+
+:root[theme="light"] {
+    --white-glass-500: rgba(255, 255, 255, .50);
+    --white-glass-600: rgba(255, 255, 255, .60);
+    --white-glass-700: rgba(255, 255, 255, .70);
+    --white-glass-800: rgba(255, 255, 255, .80);
+}
+
+:root[theme="light"] {
+    --gradient-accent: linear-gradient(182.54deg, #64e38f 20.95%, var(--color-accent) 134.42%);
+}
+
+:root[theme="light"] {
+    --container-default-width: 1150px;
+    --container-small-width:   980px;
 }

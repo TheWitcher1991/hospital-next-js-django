@@ -1,0 +1,27 @@
+.spacing {
+    height: 20px;
+}
+
+.spacing__l {
+    height: 50px;
+}
+
+.spacing__xs {
+    height: 8px;
+}
+
+.spacing__xss {
+    height: 2px;
+}
+
+.spacing__s {
+    height: 14px;
+}
+
+.spacing__ml {
+    height: 30px;
+}
+
+.spacing__xl {
+    height: 50px;
+}

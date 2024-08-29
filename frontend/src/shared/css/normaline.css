@@ -103,6 +103,7 @@ body {
     color: var(--color-black);
     margin: 0;
     padding: 0;
+    height: 100%;
     display: flex;
     position: relative;
     line-height: 1.4;

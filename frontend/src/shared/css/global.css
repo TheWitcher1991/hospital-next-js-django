@@ -1,7 +1,5 @@
 @charset "UTF-8";
 
-@import url("@mdi/font/css/materialdesignicons.min.css");
-
 @import "./vars.css";
 @import "./normaline.css";
 @import "./animation.css";

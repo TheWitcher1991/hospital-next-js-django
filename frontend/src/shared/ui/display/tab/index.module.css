@@ -1,0 +1,42 @@
+.tab {
+    display: flex;
+    width: 20px;
+}
+
+.tab__ml {
+    display: flex;
+    width: 30px;
+}
+
+
+.tab__s {
+    display: flex;
+    width: 14px;
+}
+
+
+.tab__xs {
+    display: flex;
+    width: 8px;
+}
+
+.tab__xss {
+    display: flex;
+    margin: 4px;
+}
+
+.tab__l {
+    display: flex;
+    width: 36px;
+}
+
+
+.tab__xl {
+    display: flex;
+    width: 50px;
+}
+
+.tab__xxl {
+    display: flex;
+    width: 80px;
+}

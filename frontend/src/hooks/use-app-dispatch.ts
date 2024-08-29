@@ -1,4 +1,4 @@
 import { AppDispatch } from '@/store'
 import { useDispatch } from 'react-redux'
 
-export const useAppDispatch: () => AppDispatch = () => useDispatch()
+export const useAppDispatch = () => useDispatch<AppDispatch>()

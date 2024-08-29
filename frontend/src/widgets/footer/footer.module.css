@@ -1,0 +1,24 @@
+.footer {
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    padding: 0;
+    background-color: var(--color-white);
+    flex: 0 0 auto;
+    border-top: 1px solid var(--color-black);
+    margin: 60px 0 0 0;
+}
+
+.footer__container {
+    padding: 30px 0
+}
+
+.footer__img {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    img {
+        filter: grayscale(100%)
+    }
+}

@@ -1,0 +1,18 @@
+.container {
+    margin: 0 auto;
+}
+
+.container__default {
+    max-width: var(--container-default-width);
+}
+
+.container__small {
+    max-width: var(--container-small-width);
+}
+
+
+@media all and (max-width: 1250px) {
+    .container {
+        max-width: 95%;
+    }
+}

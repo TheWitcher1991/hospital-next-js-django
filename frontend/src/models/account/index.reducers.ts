@@ -12,11 +12,11 @@ export const accountSlice = createSlice({
 	name: 'account',
 	initialState,
 	reducers: {
-		login: (state, action: PayloadAction<AccountState>) => {
+		login(state, action: PayloadAction<AccountState>) {
 			Object.assign(state, action.payload)
 			saveStateToLocalStorage(state)
 		},
-		logout: (state) => {
+		logout(state) {
 			Object.assign(state, initialState)
 			saveStateToLocalStorage(state)
 		},
@@ -24,4 +24,5 @@ export const accountSlice = createSlice({
 })
 
 export const accountReducer = accountSlice.reducer
+export const accountSelectors = accountSlice.selectors
 export const accountActions = accountSlice.actions

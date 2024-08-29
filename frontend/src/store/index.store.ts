@@ -1,15 +1,21 @@
 import { configureStore } from '@reduxjs/toolkit'
+import { setupListeners } from '@reduxjs/toolkit/query'
 import { RootReducer } from '@/store/index.reducers'
-import { AuthService } from '@/models/auth'
+import { AppMiddlewares } from '@/store/index.middlewares'
 
-export const store = () => {
+export const makeStore = () => {
 	return configureStore({
 		reducer: RootReducer,
+		devTools: process.env.NODE_ENV !== 'production',
 		middleware: (getDefaultMiddleware) =>
-			getDefaultMiddleware().concat(AuthService.middleware),
+			getDefaultMiddleware().concat(AppMiddlewares),
 	})
 }
 
-export type AppStore = ReturnType<typeof store>
+export const store = makeStore()
+
+setupListeners(store.dispatch)
+
+export type AppStore = ReturnType<typeof makeStore>
 export type RootState = ReturnType<AppStore['getState']>
 export type AppDispatch = AppStore['dispatch']
