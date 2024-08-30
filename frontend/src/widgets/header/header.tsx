@@ -1,5 +1,7 @@
 import { FC } from 'react'
-import { Button, Container, Icon, Logo } from '@/shared/ui'
+import { HeaderButtons } from '@/widgets/header/header-buttons'
+import { HeaderMenu } from '@/widgets/header/HeaderMenu'
+import { Container, Logo } from '@/shared/ui'
 import styles from './header.module.css'
 
 export const Header: FC = () => {
@@ -8,10 +10,8 @@ export const Header: FC = () => {
 			<Container>
 				<nav className={styles.header__nav}>
 					<Logo />
-					<Button>
-						<Icon label={'login'} />
-						Авторизация
-					</Button>
+					<HeaderMenu />
+					<HeaderButtons />
 				</nav>
 			</Container>
 		</header>

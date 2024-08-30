@@ -7,11 +7,7 @@ import WithToastr from '@/providers/with-toastr'
 const WithProviders: FC<PropsWithChildren> = ({ children }) => {
 	return (
 		<WithProgressBar>
-			<WithStore>
-				<WithPersist>
-					<WithToastr>{children}</WithToastr>
-				</WithPersist>
-			</WithStore>
+			<WithStore>{children}</WithStore>
 		</WithProgressBar>
 	)
 }

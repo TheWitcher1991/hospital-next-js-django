@@ -2,14 +2,14 @@ import { CSSProperties, FC } from 'react'
 import styles from './index.module.css'
 
 interface CardProps extends Omit<DetailedDivProps, 'className' | 'style'> {
-	radius: 'sm' | 'md' | 'lg'
+	radius?: 'sm' | 'md' | 'lg'
 	fullWidth?: boolean
 	isHoverable?: boolean
 	style?: CSSProperties
 }
 
 export const Card: FC<CardProps> = ({
-	radius,
+	radius = 'sm',
 	fullWidth,
 	isHoverable,
 	children,

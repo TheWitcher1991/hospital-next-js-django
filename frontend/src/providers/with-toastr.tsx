@@ -13,6 +13,7 @@ const WithToastr: FC<PropsWithChildren> = ({ children }) => {
 				timeout={3000}
 				transitionIn='fadeIn'
 				transitionOut='fadeOut'
+				getState={state => state.toastr}
 			/>
 		</>
 	)

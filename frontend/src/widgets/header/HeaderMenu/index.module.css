@@ -1,0 +1,16 @@
+.header__menu {
+    display: flex;
+    align-items: center;
+
+    > a {
+        color: var(--color);
+        display: flex;
+        margin-left: 30px;
+        font-weight: 500;
+        font-size: 16px;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}

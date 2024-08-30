@@ -1,3 +1,5 @@
+'use client'
+
 import { FC, PropsWithChildren } from 'react'
 import NextProgressBar from 'nextjs-progressbar'
 

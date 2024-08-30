@@ -1,10 +1,11 @@
 import { ReactNode } from 'react'
-import { Container } from '@/shared/ui'
+import { Card, Container, Spacing } from '@/shared/ui'
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
 	return (
 		<Container>
-			<section>{children}</section>
+			<Spacing v={'ml'} />
+			<Card>{children}</Card>
 		</Container>
 	)
 }

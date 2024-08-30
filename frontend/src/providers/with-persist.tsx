@@ -4,7 +4,7 @@ import { persistor } from '@/store'
 
 const WithPersist: FC<PropsWithChildren> = ({ children }) => {
 	return (
-		<PersistGate persistor={persistor} loading={null}>
+		<PersistGate loading={null} persistor={persistor}>
 			{children}
 		</PersistGate>
 	)

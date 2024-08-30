@@ -384,6 +384,14 @@
   dependencies:
     "@types/react" "*"
 
+"@types/react-redux-toastr@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@types/react-redux-toastr/-/react-redux-toastr-8.0.0.tgz#d9ff1a6cb801c9826cf864e3c6824e0af716693e"
+  integrity sha512-QU2W1ik/h5vgonidIhoM+2scCTFrVfbtp8y7XUW0DCkat8TJE/DUQsIiFB3XlhIKV+C0aj2qEUiYfLqYA+d8jA==
+  dependencies:
+    "@types/react" "*"
+    redux "^3.6.0 || ^4.0.0 || ^5.0.0"
+
 "@types/react@*", "@types/react@^18":
   version "18.3.4"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-18.3.4.tgz#dfdd534a1d081307144c00e325c06e00312c93a3"
@@ -2833,7 +2841,7 @@ redux-thunk@^3.1.0:
   resolved "https://registry.yarnpkg.com/redux-thunk/-/redux-thunk-3.1.0.tgz#94aa6e04977c30e14e892eae84978c1af6058ff3"
   integrity sha512-NW2r5T6ksUKXCabzhL9z+h206HQw/NJkcLm1GPImRQ8IzfXwRGqjVhKJGauHirT0DAuyy6hjdnMZaRoAcy0Klw==
 
-redux@^5.0.1:
+"redux@^3.6.0 || ^4.0.0 || ^5.0.0", redux@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/redux/-/redux-5.0.1.tgz#97fa26881ce5746500125585d5642c77b6e9447b"
   integrity sha512-M9/ELqF6fy8FwmkpnF0S3YKOqMyoWJ4+CS5Efg2ct3oY9daQvd/Pc71FpGZsVsbl3Cpb+IIcjBDUnnyBdQbq4w==
