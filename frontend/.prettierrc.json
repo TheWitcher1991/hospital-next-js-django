@@ -3,5 +3,21 @@
   "tabWidth": 4,
   "useTabs": true,
   "semi": false,
-  "singleQuote": true
+  "jsxSingleQuote": true,
+  "singleQuote": true,
+  "arrowParens": "avoid",
+  "importOrder": [
+    "<THIRD_PARTY_MODULES>",
+    "^@/widgets/(.*)$",
+    "^@/features/(.*)$",
+    "^@/providers/(.*)$",
+    "^@/models/(.*)$",
+    "^@/hooks/(.*)$",
+    "^@/store/(.*)$",
+    "^@/shared/(.*)$",
+    "^./(.*)",
+    "(.css)$"
+  ],
+  "importOrderSeparation": true,
+  "importOrderSortSpecifiers": true
 }

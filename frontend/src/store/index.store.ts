@@ -1,18 +1,45 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { setupListeners } from '@reduxjs/toolkit/query'
-import { RootReducer } from '@/store/index.reducers'
-import { AppMiddlewares } from '@/store/index.middlewares'
+import {
+	AppMiddlewares,
+	RTKQueryErrorLoggerMiddleware,
+} from '@/store/index.middlewares'
+import { persistedReducer } from '@/store/index.storage'
+import {
+	FLUSH,
+	REHYDRATE,
+	PAUSE,
+	PERSIST,
+	PURGE,
+	REGISTER,
+	persistStore,
+} from 'redux-persist'
 
 export const makeStore = () => {
 	return configureStore({
-		reducer: RootReducer,
+		reducer: persistedReducer,
 		devTools: process.env.NODE_ENV !== 'production',
-		middleware: (getDefaultMiddleware) =>
-			getDefaultMiddleware().concat(AppMiddlewares),
+		middleware: getDefaultMiddleware =>
+			getDefaultMiddleware({
+				serializableCheck: {
+					ignoreActions: [
+						FLUSH,
+						REHYDRATE,
+						PAUSE,
+						PERSIST,
+						PURGE,
+						REGISTER,
+					],
+				},
+			})
+				.concat(RTKQueryErrorLoggerMiddleware)
+				.concat(AppMiddlewares),
 	})
 }
 
 export const store = makeStore()
+
+export const persistor = persistStore(store)
 
 setupListeners(store.dispatch)
 
