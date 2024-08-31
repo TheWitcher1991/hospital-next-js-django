@@ -22,7 +22,7 @@ DEFAULT_CELERY_RETRY = 3
 DEFAULT_CELERY_RETRY_DELAY = 15
 
 app.conf.worker_prefetch_multiplier = 1
-app.conf.worker_max_tasks_per_child = 10
+app.conf.worker_max_tasks_per_child = 5
 app.conf.task_acks_late = False
 
 # TODO: может перенести на rabbitmq?

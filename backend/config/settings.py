@@ -36,15 +36,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_redis',
+    'django_prometheus',
     'rest_framework',
     'django_filters',
     'debug_toolbar',
     'redisboard',
     'drf_spectacular',
     'api'
+    'business'
 ]
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.gzip.GZipMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
@@ -58,6 +62,7 @@ MIDDLEWARE = [
     'django.middleware.locale.LocaleMiddleware',
     'api.middleware.TokenMiddleware',
     'api.middleware.ActiveUserMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware'
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -193,6 +198,9 @@ STATICFILES_DIRS = (
     BASE_DIR / 'static',
 )
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 if DEBUG:
@@ -204,6 +212,15 @@ SESSION_TIMEOUT = 3600
 SESSION_EXPIRE_MINUTES = 60
 SESSION_EXPIRE_HOURS = 3
 SESSION_EXPIRE_DAYS = 7
+
+YOOKASSA_ACCOUNT_ID = env('YOOKASSA_ACCOUNT_ID', default='')
+YOOKASSA_SECRET_KEY = env('YOOKASSA_SECRET_KEY', default='')
+YOOKASSA_RETURN_URL = env('YOOKASSA_RETURN_URL', default='')
+
+YOOKASSA_DEBUG = DEBUG
+
+INVOICE_DAYS_TO_EXPIRE = 30
+PAYMENT_DAYS_TO_EXPIRE = 1
 
 if DEBUG:
     DEBUG_TOOLBAR_PANELS = [

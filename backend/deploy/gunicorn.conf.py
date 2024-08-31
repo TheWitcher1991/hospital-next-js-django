@@ -1,6 +1,6 @@
 import multiprocessing
 
-name = 'talentspot_wsgi'
+name = 'wsgi'
 
 bind = "0.0.0.0:5000"
 
@@ -9,8 +9,6 @@ loglevel = "warning"
 workers = multiprocessing.cpu_count() * 2 + 1
 
 threads = 2
-
-# threads = multiprocessing.cpu_count() * 2
 
 max_requests = 1000
 max_requests_jitter = 50

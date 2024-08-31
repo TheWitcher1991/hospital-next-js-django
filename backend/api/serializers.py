@@ -1,27 +1,85 @@
+from django.contrib.auth import authenticate
 from django.contrib.auth.password_validation import validate_password
+from django.db import transaction
+from django.utils import timezone
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
+from config import settings
 from .models import *
+from .utils import get_client_ip, jwt_encode
 
 
-"""
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user: AuthUser) -> Token:
-        token = super().get_token(user)
+class BaseLoginSerializer(serializers.Serializer):
+    email = serializers.EmailField(required=True)
+    password = serializers.CharField(required=True)
+    access_token = serializers.CharField(read_only=True)
+    expires = serializers.CharField(read_only=True)
 
-        token['email'] = user.email
-        token['first_name'] = user.first_name
-        token['last_name'] = user.last_name
-        token['patronymic'] = user.patronymic
-        token['age'] = user.age
-        token['date'] = user.date
-        token['date_joined'] = user.date_joined
-        token['role'] = user.role
-        token['gender'] = user.gender
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation.pop('email', None)
+        representation.pop('password', None)
+        return representation
 
-        return token
-"""
+    @staticmethod
+    def validate_session(user, request):
+        ip = get_client_ip(request)
+
+        session = Session.objects.create(
+            user=user,
+            access_token=jwt_encode(user, is_refresh=False),
+            refresh_token=jwt_encode(user, is_refresh=True),
+            refresh_token_expires=timezone.now() + timezone.timedelta(days=settings.SESSION_EXPIRE_DAYS),
+            user_agent=request.META.get('HTTP_USER_AGENT'),
+            ip=ip,
+        )
+
+        if not hasattr(user, 'sessions'):
+            Session.objects.filter(user=user).delete()
+            raise ValidationError('Session not created')
+
+        user.is_online = True
+        user.last_ip = ip
+        user.save()
+
+        return session
+
+
+class LoginSerializer(BaseLoginSerializer):
+    account = serializers.JSONField(read_only=True)
+
+    @staticmethod
+    def get_user_data(user):
+        try:
+            return User.objects.get(user=user)
+        except Exception as e:
+            raise ValidationError(e)
+
+    def validate(self, attrs):
+        email = attrs.get('email', None)
+        password = attrs.get('password', None)
+        request = self.context['request']
+
+        if email is None:
+            raise ValidationError('Email is required to login')
+        if password is None:
+            raise ValidationError('Password is required to login')
+
+        user = authenticate(request, email=email, password=password)
+
+        if user is None:
+            raise ValidationError('Incorrect email or password')
+
+        with transaction.atomic():
+            session = self.validate_session(user, request)
+
+            attrs['account'] = self.get_user_data(user)
+            attrs['access_token'] = session.access_token
+            attrs['expires'] = session.refresh_token_expires
+            attrs['token_type'] = 'Bearer'
+
+            return attrs
 
 
 class UserCreateSerializer(serializers.ModelSerializer):

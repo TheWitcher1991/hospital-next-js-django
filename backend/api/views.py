@@ -1,48 +1,54 @@
-import json
-from django.contrib.auth import authenticate, login, logout
-from django.middleware.csrf import get_token
+from django.contrib.auth import logout
 from django.core.exceptions import ObjectDoesNotExist
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
-from rest_framework import generics
+from rest_framework.generics import GenericAPIView
 from rest_framework.response import Response
+from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_200_OK, HTTP_403_FORBIDDEN
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated, AllowAny
-from rest_framework.authentication import SessionAuthentication
+from rest_framework.permissions import AllowAny
 
-from .models import *
+from .mixins import AllowAnyMixin
 from .serializers import *
-from .permissions import *
 
 
-class CsrfView(APIView):
-    permission_classes = (AllowAny, )
-    authentication_classes = ()
+class LoginAPIView(GenericAPIView, AllowAnyMixin):
 
-    @method_decorator(ensure_csrf_cookie)
-    def get(self, request):
-        token = get_token(request)
-        response = Response({'detail': token})
-        response['X-CSRFToken'] = token
+    queryset = User.objects.all()
+    serializer_class = LoginSerializer
+
+    def post(self, *args, **kwargs) -> Response:
+        email = self.request.data.get('email')
+        password = self.request.data.get('password')
+
+        user = self.queryset.get(email=email)
+
+        if user is None:
+            return Response({'msg': 'user not found'}, status=HTTP_404_NOT_FOUND)
+
+        if user.is_staff or user.is_superuser:
+            return Response({'msg': 'user is not an employer'}, status=HTTP_403_FORBIDDEN)
+
+        serializer = self.serializer_class(data={
+            'email': email,
+            'password': password
+        }, context={'request': self.request})
+        serializer.is_valid(raise_exception=True)
+
+        refresh_token = serializer.data.pop('refresh_token', None)
+
+        response = Response(serializer.data, status=HTTP_200_OK)
+
+        response.set_cookie(
+            'refresh_token',
+            refresh_token,
+            httponly=True,
+            secure=True,
+            samesite='Strict',
+            expires=settings.SESSION_EXPIRE_DAYS * 24 * 60 * 60
+        )
+
         return response
-
-
-class LoginView(APIView):
-    permission_classes = (AllowAny, )
-    authentication_classes = ()
-
-    def get(self, request):
-        email = self.request.query_params.get('email')
-        password = self.request.query_params.get('password')
-
-        user = authenticate(email=email, password=password)
-
-        if user is not None:
-            login(request, user)
-            serializer = UserSerializer(user)
-            return Response(serializer.data)
-        else:
-            return Response(status=400)
 
 
 class LogoutView(APIView):
