@@ -44,9 +44,19 @@ app.conf.task_queues = {
         Exchange(CELERY_QUEUE_DEFAULT),
         routing_key=CELERY_QUEUE_DEFAULT,
     ),
+    Queue(
+        'business',
+        Exchange('business'),
+        routing_key='business',
+    ),
 }
 
-app.conf.task_routes = {}
+app.conf.task_routes = {
+    'business.tasks.payment_create_task': {'queue': 'business'},
+    'business.tasks.payment_capture_task': {'queue': 'business'},
+    'business.tasks.payment_cancel_task': {'queue': 'business'},
+    'business.tasks.payment_find_one_task': {'queue': 'business'}
+}
 
 app.conf.beat_schedule = {
     'check_expired_sessions': {

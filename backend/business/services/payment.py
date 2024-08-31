@@ -10,7 +10,7 @@ from config import settings
 Configuration.account_id = settings.YOOKASSA_ACCOUNT_ID
 Configuration.secret_key = settings.YOOKASSA_SECRET_KEY
 
-logger = logging.getLogger('business_yookassa')
+logger = logging.getLogger('business')
 
 
 class PaymentService(object):
