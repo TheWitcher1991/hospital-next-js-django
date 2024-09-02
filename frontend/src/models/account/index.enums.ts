@@ -3,3 +3,8 @@ export enum UserRole {
 	EMPLOYEE = 'EMPLOYEE',
 	GUEST = 'GUEST',
 }
+
+export enum UserFloor {
+	MALE = 'MALE',
+	FEMALE = 'FEMALE',
+}

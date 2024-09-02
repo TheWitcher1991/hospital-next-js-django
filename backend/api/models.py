@@ -62,7 +62,7 @@ class User(AbstractUser, PermissionsMixin):
 
     def __str__(self):
         return f'{self.get_role_display()} | {self.last_name} | {self.first_name}'
-    
+
 
 class Session(models.Model):
     access_token = models.CharField(max_length=1024, unique=True)
@@ -137,8 +137,8 @@ class PatientSignature(models.Model):
     class Meta:
         verbose_name = _('ЭЦП')
         verbose_name_plural = _('ЭЦП')
-    
-    
+
+
 class Position(models.Model):
     name = models.CharField(_('Название'), max_length=256)
     functions = models.TextField(_('Функции'))
@@ -147,7 +147,7 @@ class Position(models.Model):
     class Meta:
         verbose_name = _('Должность')
         verbose_name_plural = _('Должности')
-        
+
     def __str__(self):
         return f'{self.name} | {self.salary} руб.'
 
@@ -159,7 +159,7 @@ class Cabinet(models.Model):
     class Meta:
         verbose_name = _('Кабинет')
         verbose_name_plural = _('Кабинеты')
-    
+
     def __str__(self):
         return f'{self.name} | {self.number}'
 
@@ -226,7 +226,7 @@ class Service(models.Model):
     class Meta:
         verbose_name = _('Услуга')
         verbose_name_plural = _('Услуги')
-        
+
     def __str__(self):
         return f'{self.name} | {self.price} руб.'
 
@@ -254,8 +254,8 @@ class PatientCart(models.Model):
 
     def __str__(self):
         return f'{self.get_status_display()} | {self.date_visit}'
-    
-    
+
+
 class Agreement(models.Model):
     start = models.TimeField(_('Начало'))
     end = models.TimeField(_('Конец'))
@@ -273,4 +273,3 @@ class Talon(models.Model):
     class Meta:
         verbose_name = _('Талон')
         verbose_name_plural = _('Талоны')
-        
