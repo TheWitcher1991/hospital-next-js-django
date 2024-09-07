@@ -17,11 +17,11 @@ class ReadOnly(BasePermission):
         return request.method in SAFE_METHODS
 
 
-class IsPatient(BasePermission):
+class IsPatient(IsAuthenticated):
     def has_permission(self, request, view):
         return request.user.role == Role.PATIENT
 
 
-class IsEmployee(BasePermission):
+class IsEmployee(IsAuthenticated):
     def has_permission(self, request, view):
         return request.user.role == Role.EMPLOYEE

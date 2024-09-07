@@ -18,7 +18,7 @@ def create_patient_balance_task(self, patient_id: int) -> None:
 @app.task(bind=True, base=BaseTaskWithRetry)
 def check_expired_sessions_task(self) -> None:
     try:
-        expired_sessions = Session.objects.filter(refresh_token_expires__lt=timezone.now()).values_list("id", flat=True)
+        expired_sessions = Session.objects.filter(refresh_token_expires__lt=timezone.now())
         delete_session_task.chunks([(session,) for session in queryset_ids(expired_sessions)], 15).apply_async()
     except Exception as e:
         raise Exception(e)
