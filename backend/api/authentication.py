@@ -1,10 +1,10 @@
 from django.contrib.auth.models import AnonymousUser
 from django.utils.timezone import now
-from rest_framework.authentication import TokenAuthentication, BaseAuthentication
-from rest_framework.exceptions import PermissionDenied, AuthenticationFailed
+from rest_framework.authentication import BaseAuthentication, TokenAuthentication
+from rest_framework.exceptions import AuthenticationFailed, PermissionDenied
 
 from api.models import Session
-from api.utils import jwt_is_valid, get_client_ip
+from api.utils import force_logout, get_client_ip, jwt_is_valid
 
 
 class SessionTokenAuthentication(TokenAuthentication):
@@ -14,34 +14,34 @@ class SessionTokenAuthentication(TokenAuthentication):
 
     def authenticate(self, request):
         try:
-            auth = request.headers.get('Authorization', b'')
+            auth = request.headers.get("Authorization", b"")
 
             if not auth:
                 return None
 
             if isinstance(auth, bytes):
-                auth = auth.decode('utf-8')
+                auth = auth.decode("utf-8")
 
             try:
-                token = auth.split('Bearer ')[1]
+                token = auth.split("Bearer ")[1]
             except IndexError:
                 raise PermissionDenied('Invalid authorization header. Expected "Bearer <access_token>"')
 
             if not token:
-                return PermissionDenied('Access token is empty')
+                return PermissionDenied("Access token is empty")
 
             if not jwt_is_valid(token):
-                raise AuthenticationFailed('Access token not valid')
+                raise AuthenticationFailed("Access token not valid")
 
             session = Session.objects.filter(access_token=token).first()
 
             if not session:
-                raise AuthenticationFailed('Session not found')
+                raise AuthenticationFailed("Session not found")
 
             if not jwt_is_valid(session.refresh_token):
                 force_logout(request, user=session.user)
                 request.user = AnonymousUser()
-                raise AuthenticationFailed('Session has expired. Logout')
+                raise AuthenticationFailed("Session has expired. Logout")
 
             request.user = session.user
 
@@ -61,7 +61,7 @@ class RefreshTokenAuthentication(BaseAuthentication):
     """
 
     def authenticate(self, request):
-        refresh_token = request.COOKIES['refresh_token']
+        refresh_token = request.COOKIES["refresh_token"]
 
         if not refresh_token:
             return None
@@ -71,7 +71,7 @@ class RefreshTokenAuthentication(BaseAuthentication):
             if not jwt_is_valid(refresh_token):
                 force_logout(request)
                 request.user = AnonymousUser()
-                raise AuthenticationFailed('Session has expired. Logout')
+                raise AuthenticationFailed("Session has expired. Logout")
 
             return session.user, None
         except Session.DoesNotExist:

@@ -21,7 +21,6 @@ celery = "^5.4.0"
 flower = "^2.0.1"
 pyjwt = "^2.9.0"
 pillow = "^10.4.0"
-flake8 = "^7.1.1"
 gunicorn = "^23.0.0"
 drf-spectacular = "^0.27.2"
 psycopg2 = "^2.9.9"
@@ -29,6 +28,36 @@ yookassa = "^3.3.0"
 num2words = "^0.5.13"
 django-prometheus = "^2.3.1"
 
+
+[tool.poetry.group.dev.dependencies]
+black = "^24.8.0"
+flake8 = "^7.1.1"
+isort = "^5.13.2"
+
+[tool.black]
+line-length = 120
+include = '\.pyi?$'
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 120
+multi_line_output = 3
+include_trailing_comma = true
+use_parentheses = true
+ensure_newline_before_comments = true
 
 [build-system]
 requires = ["poetry-core"]

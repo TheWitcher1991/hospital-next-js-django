@@ -9,6 +9,12 @@ import { CabinetApi } from '@/models/cabinet'
 import { PositionApi } from '@/models/position'
 import { ShiftApi } from '@/models/shift'
 import { ScheduleApi } from '@/models/schedule'
+import { PatientTypeApi } from '@/models/patient-type'
+import { PatientApi } from '@/models/patient'
+import { PatientCartApi } from '@/models/patient-cart'
+import { PatientPhoneApi } from '@/models/patient-phone'
+import { PatientSignatureApi } from '@/models/patient-signature'
+import { PatientBalanceApi } from '@/models/patient-balance'
 import { reducer as toastrReducer } from 'react-redux-toastr'
 
 export const RootReducer = combineReducers({
@@ -23,5 +29,11 @@ export const RootReducer = combineReducers({
 	[PositionApi.reducerPath]: PositionApi.reducer,
 	[ShiftApi.reducerPath]: ShiftApi.reducer,
 	[ScheduleApi.reducerPath]: ScheduleApi.reducer,
+	[PatientTypeApi.reducerPath]: PatientTypeApi.reducer,
+	[PatientApi.reducerPath]: PatientApi.reducer,
+	[PatientCartApi.reducerPath]: PatientCartApi.reducer,
+	[PatientPhoneApi.reducerPath]: PatientPhoneApi.reducer,
+	[PatientSignatureApi.reducerPath]: PatientSignatureApi.reducer,
+	[PatientBalanceApi.reducerPath]: PatientBalanceApi.reducer,
 	toastr: toastrReducer,
 })

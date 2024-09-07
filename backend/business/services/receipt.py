@@ -9,7 +9,7 @@ from config import settings
 Configuration.account_id = settings.YOOKASSA_ACCOUNT_ID
 Configuration.secret_key = settings.YOOKASSA_SECRET_KEY
 
-logger = logging.getLogger('business')
+logger = logging.getLogger("business")
 
 
 class ReceiptService(object):
@@ -25,7 +25,7 @@ class ReceiptService(object):
         try:
             return Receipt.create(receipt_data)
         except Exception as e:
-            logger.error(f'ERROR: Ошибка при создании чека {receipt_data} {e} | {now()}')
+            logger.error(f"ERROR: Ошибка при создании чека {receipt_data} {e} | {now()}")
             raise e
 
     @staticmethod
@@ -33,7 +33,7 @@ class ReceiptService(object):
         try:
             return Receipt.find_one(receipt_id)
         except Exception as e:
-            logger.error(f'ERROR: Ошибка при получении чека {receipt_id} {e} | {now()}')
+            logger.error(f"ERROR: Ошибка при получении чека {receipt_id} {e} | {now()}")
             raise e
 
     @staticmethod
@@ -43,5 +43,5 @@ class ReceiptService(object):
         try:
             return Receipt.list(params)
         except Exception as e:
-            logger.error(f'ERROR: Ошибка при получении списка чеков {e} | {now()}')
+            logger.error(f"ERROR: Ошибка при получении списка чеков {e} | {now()}")
             raise e

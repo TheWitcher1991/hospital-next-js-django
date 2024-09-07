@@ -3,10 +3,10 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import ensure_csrf_cookie
 from rest_framework.generics import GenericAPIView
-from rest_framework.response import Response
-from rest_framework.status import HTTP_404_NOT_FOUND, HTTP_200_OK, HTTP_403_FORBIDDEN
-from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework.status import HTTP_200_OK, HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND
+from rest_framework.views import APIView
 
 from .mixins import AllowAnyMixin
 from .serializers import *
@@ -18,34 +18,33 @@ class LoginAPIView(GenericAPIView, AllowAnyMixin):
     serializer_class = LoginSerializer
 
     def post(self, *args, **kwargs) -> Response:
-        email = self.request.data.get('email')
-        password = self.request.data.get('password')
+        email = self.request.data.get("email")
+        password = self.request.data.get("password")
 
         user = self.queryset.get(email=email)
 
         if user is None:
-            return Response({'msg': 'user not found'}, status=HTTP_404_NOT_FOUND)
+            return Response({"msg": "user not found"}, status=HTTP_404_NOT_FOUND)
 
         if user.is_staff or user.is_superuser:
-            return Response({'msg': 'user is not an employer'}, status=HTTP_403_FORBIDDEN)
+            return Response({"msg": "user is not an employer"}, status=HTTP_403_FORBIDDEN)
 
-        serializer = self.serializer_class(data={
-            'email': email,
-            'password': password
-        }, context={'request': self.request})
+        serializer = self.serializer_class(
+            data={"email": email, "password": password}, context={"request": self.request}
+        )
         serializer.is_valid(raise_exception=True)
 
-        refresh_token = serializer.data.pop('refresh_token', None)
+        refresh_token = serializer.data.pop("refresh_token", None)
 
         response = Response(serializer.data, status=HTTP_200_OK)
 
         response.set_cookie(
-            'refresh_token',
+            "refresh_token",
             refresh_token,
             httponly=True,
             secure=True,
-            samesite='Strict',
-            expires=settings.SESSION_EXPIRE_DAYS * 24 * 60 * 60
+            samesite="Strict",
+            expires=settings.SESSION_EXPIRE_DAYS * 24 * 60 * 60,
         )
 
         return response
@@ -54,19 +53,19 @@ class LoginAPIView(GenericAPIView, AllowAnyMixin):
 class LogoutView(APIView):
     def post(self, request):
         logout(request)
-        return Response({'detail': 'Successfully logged out.'})
+        return Response({"detail": "Successfully logged out."})
 
 
 class AuthenticateView(APIView):
-    permission_classes = (AllowAny, )
+    permission_classes = (AllowAny,)
     authentication_classes = ()
 
     @method_decorator(ensure_csrf_cookie)
     def get(self, request):
         if not request.user.is_authenticated:
-            return Response({'isAuthenticated': False})
+            return Response({"isAuthenticated": False})
 
-        return Response({'isAuthenticated': True})
+        return Response({"isAuthenticated": True})
 
 
 class ServiceTypeListView(APIView):

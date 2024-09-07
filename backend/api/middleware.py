@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AnonymousUser
 from django.http import HttpResponseForbidden
-from rest_framework.exceptions import PermissionDenied, AuthenticationFailed
+from rest_framework.exceptions import AuthenticationFailed, PermissionDenied
 
 from api.authentication import SessionTokenAuthentication
 from api.defines import Role
@@ -43,7 +43,7 @@ class PingUserMiddleware:
         self.get_response = get_response
 
     def __call__(self, request):
-        if request.user.is_authenticated and hasattr(request.user, 'role'):
+        if request.user.is_authenticated and hasattr(request.user, "role"):
             current_user = request.user.id
             try:
                 user = User.objects.get(id=current_user)

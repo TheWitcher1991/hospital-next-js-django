@@ -5,9 +5,8 @@ export interface IBaseUser {
 	first_name: string
 	last_name: string
 	patronymic: string
-	age: number
 	date: string
-	date_joined: string
+	age: number
 	gender: UserFloor
 	role: UserRole
 }
@@ -17,9 +16,12 @@ export interface IUser extends IBaseUser {
 	is_online: boolean
 	last_ip: Nullable<string>
 	last_online: Nullable<string>
+	date_joined: string
 }
 
-export type IUpdateUser = IBaseUser
+export type IUpdateUser = Omit<IBaseUser, 'role'>
+
+export type ICreateUser = IBaseUser
 
 export interface AccountState {
 	id: number

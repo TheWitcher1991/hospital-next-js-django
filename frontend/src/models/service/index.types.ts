@@ -1,6 +1,7 @@
 import { IServiceType } from '@/models/service-type'
 
 export interface IService {
+	id: number
 	name: string
 	price: string
 	employee: number

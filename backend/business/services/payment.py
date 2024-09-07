@@ -3,14 +3,14 @@ from decimal import Decimal
 
 from django.utils.timezone import now
 from yookassa import Configuration, Payment
-from yookassa.domain.response import PaymentResponse, PaymentListResponse
+from yookassa.domain.response import PaymentListResponse, PaymentResponse
 
 from config import settings
 
 Configuration.account_id = settings.YOOKASSA_ACCOUNT_ID
 Configuration.secret_key = settings.YOOKASSA_SECRET_KEY
 
-logger = logging.getLogger('business')
+logger = logging.getLogger("business")
 
 
 class PaymentService(object):
@@ -27,14 +27,14 @@ class PaymentService(object):
 
     @staticmethod
     def get_return_url() -> str:
-        return f'{settings.YOOKASSA_RETURN_URL}'
+        return f"{settings.YOOKASSA_RETURN_URL}"
 
     @staticmethod
     def create(payment_data: dict):
         try:
             return Payment.create(payment_data)
         except Exception as e:
-            logger.error(f'ERROR: Ошибка при создании платежа {payment_data} {e} | {now()}')
+            logger.error(f"ERROR: Ошибка при создании платежа {payment_data} {e} | {now()}")
             raise e
 
     @staticmethod
@@ -42,7 +42,7 @@ class PaymentService(object):
         try:
             return Payment.find_one(payment_id)
         except Exception as e:
-            logger.error(f'ERROR: Ошибка при получении объекта payment {payment_id} {e} | {now()}')
+            logger.error(f"ERROR: Ошибка при получении объекта payment {payment_id} {e} | {now()}")
             raise e
 
     @staticmethod
@@ -50,20 +50,23 @@ class PaymentService(object):
         try:
             return Payment.list()
         except Exception as e:
-            logger.error(f'ERROR: Ошибка при получении списка платежей {e} | {now()}')
+            logger.error(f"ERROR: Ошибка при получении списка платежей {e} | {now()}")
             raise e
 
     @staticmethod
-    def capture(payment_id: str, payment_amount: Decimal, payment_currency: str = 'RUB'):
+    def capture(payment_id: str, payment_amount: Decimal, payment_currency: str = "RUB"):
         try:
-            return Payment.capture(payment_id, {
-                'amount': {
-                    'value': payment_amount,
-                    'currency': payment_currency,
+            return Payment.capture(
+                payment_id,
+                {
+                    "amount": {
+                        "value": payment_amount,
+                        "currency": payment_currency,
+                    },
                 },
-            })
+            )
         except Exception as e:
-            logger.error(f'ERROR: Ошибка при подтверждении платежа {payment_id} {e} | {now()}')
+            logger.error(f"ERROR: Ошибка при подтверждении платежа {payment_id} {e} | {now()}")
             raise e
 
     @staticmethod
@@ -71,5 +74,5 @@ class PaymentService(object):
         try:
             return Payment.cancel(payment_id)
         except Exception as e:
-            logger.error(f'ERROR: Ошибка при отмене платежа {payment_id} {e} | {now()}')
+            logger.error(f"ERROR: Ошибка при отмене платежа {payment_id} {e} | {now()}")
             raise e

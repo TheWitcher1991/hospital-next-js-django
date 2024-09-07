@@ -1,10 +1,15 @@
 from collections.abc import Iterable
 
 from django.core.cache import cache
-from django.db.models import QuerySet, Model
+from django.db.models import Model, QuerySet
 from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import DestroyModelMixin, UpdateModelMixin, CreateModelMixin, RetrieveModelMixin, \
-    ListModelMixin
+from rest_framework.mixins import (
+    CreateModelMixin,
+    DestroyModelMixin,
+    ListModelMixin,
+    RetrieveModelMixin,
+    UpdateModelMixin,
+)
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.serializers import ModelSerializer
@@ -14,7 +19,7 @@ def clean_cache_by_tag(tag_cache: str) -> None:
     """
     Очищает кэш по тегу
     """
-    keys = cache.keys(f'{tag_cache}*')
+    keys = cache.keys(f"{tag_cache}*")
     cache.delete_many(keys)
 
 
@@ -32,7 +37,7 @@ class QuerysetCachedMixin(GenericAPIView):
     """
 
     def get_queryset(self) -> QuerySet[Model]:
-        key = f'{self.tag_cache}_queryset'
+        key = f"{self.tag_cache}_queryset"
         queryset = cache.get(key)
         if not queryset:
             queryset = super().get_queryset()
@@ -47,7 +52,7 @@ class ListCachedMixin(ListModelMixin):
 
     def list(self, request: Request, *args, **kwargs) -> Response:
         params = dict(sorted(request.GET.items())).__str__()
-        key = f'{self.tag_cache}_queryset_{params}'
+        key = f"{self.tag_cache}_queryset_{params}"
         data = cache.get(key)
         if not data:
             response = super().list(request, *args, **kwargs)
@@ -69,7 +74,7 @@ class ObjectCachedMixin(GenericAPIView):
 
     def get_object(self) -> Model:
         lookup = self.kwargs[self.lookup_field]
-        key = f'{self.tag_cache}_object_{lookup}'
+        key = f"{self.tag_cache}_object_{lookup}"
         obj = cache.get(key)
         if not obj:
             obj = super().get_object()
@@ -84,7 +89,7 @@ class RetrieveCachedMixin(RetrieveModelMixin):
 
     def retrieve(self, request: Request, *args, **kwargs) -> Response:
         lookup = self.kwargs[self.lookup_field]
-        key = f'{self.tag_cache}_retrieve_{lookup}'
+        key = f"{self.tag_cache}_retrieve_{lookup}"
         data = cache.get(key)
         if not data:
             response = super().retrieve(request, *args, **kwargs)
@@ -111,15 +116,15 @@ class CleanCachedMixin:
         clean_group_cache_by_tags(tags_cache)
 
     def clean_cache_update_destroy_object(
-            self,
-            tag_cache: str,
-            lookup: str,
-         ) -> None:
+        self,
+        tag_cache: str,
+        lookup: str,
+    ) -> None:
         tags_cache = (
-            f'{tag_cache}_queryset',
-            f'{tag_cache}_object_{lookup}',
-            f'{tag_cache}_retrieve_{lookup}',
-            )
+            f"{tag_cache}_queryset",
+            f"{tag_cache}_object_{lookup}",
+            f"{tag_cache}_retrieve_{lookup}",
+        )
         self.clean_group_cache(tags_cache)
 
 
@@ -129,7 +134,7 @@ class CreateCachedMixin(CreateModelMixin, CleanCachedMixin):
 
     def perform_create(self, serializer: ModelSerializer) -> None:
         super().perform_create(serializer)
-        self.clean_cache(f'{self.tag_cache}_queryset')
+        self.clean_cache(f"{self.tag_cache}_queryset")
 
 
 class UpdateCachedMixin(UpdateModelMixin, CleanCachedMixin):
@@ -160,13 +165,15 @@ class ListCreateCachedMixin(ListCachedMixin, CreateCachedMixin):
     """
 
 
-class CachedSetMixin(CreateCachedMixin,
-                     RetrieveCachedMixin,
-                     ObjectCachedMixin,
-                     UpdateCachedMixin,
-                     DestroyCachedMixin,
-                     ListCachedMixin,
-                     QuerysetCachedMixin):
+class CachedSetMixin(
+    CreateCachedMixin,
+    RetrieveCachedMixin,
+    ObjectCachedMixin,
+    UpdateCachedMixin,
+    DestroyCachedMixin,
+    ListCachedMixin,
+    QuerysetCachedMixin,
+):
     """
     Полный контроль кэширования
     """
