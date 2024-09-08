@@ -3,9 +3,10 @@ from decimal import Decimal
 from yookassa import Configuration, Payment
 from yookassa.domain.response import PaymentResponse
 
-from business.defines import PaymentMethod
 from config.celery import app
 from config.settings import YOOKASSA_ACCOUNT_ID, YOOKASSA_RETURN_URL, YOOKASSA_SECRET_KEY
+
+from .defines import PaymentMethod
 
 Configuration.account_id = YOOKASSA_ACCOUNT_ID
 Configuration.secret_key = YOOKASSA_SECRET_KEY

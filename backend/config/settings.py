@@ -43,7 +43,10 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "redisboard",
     "drf_spectacular",
-    "api" "business",
+    "core",
+    "patient",
+    "employee",
+    "business",
 ]
 
 MIDDLEWARE = [
@@ -59,8 +62,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.locale.LocaleMiddleware",
-    "api.middleware.TokenMiddleware",
-    "api.middleware.ActiveUserMiddleware",
+    "core.middleware.TokenMiddleware",
+    "core.middleware.PingUserMiddleware",
     "django_prometheus.middleware.PrometheusAfterMiddleware",
 ]
 
@@ -92,21 +95,21 @@ REST_FRAMEWORK = {
         "rest_framework.renderers.BrowsableAPIRenderer",
     ],
     "DEFAULT_PARSER_CLASSES": ["rest_framework.parsers.JSONParser", "rest_framework.parsers.MultiPartParser"],
-    "DEFAULT_AUTHENTICATION_CLASSES": ["api.authentication.SessionTokenAuthentication"],
+    "DEFAULT_AUTHENTICATION_CLASSES": ["core.authentication.SessionTokenAuthentication"],
     "DEFAULT_FILTER_BACKENDS": [
         "django_filters.rest_framework.DjangoFilterBackend",
         "rest_framework.filters.SearchFilter",
         "rest_framework.filters.OrderingFilter",
     ],
     "DEFAULT_THROTTLE_CLASSES": [
-        "api.throttling.BurstRateThrottle",
+        "core.throttling.BurstRateThrottle",
     ],
     "DEFAULT_THROTTLE_RATES": {
         "burst": "20/second",
     },
     "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.NamespaceVersioning",
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
-    "DEFAULT_PAGINATION_CLASS": "api.paginations.StandardPageNumberPagination",
+    "DEFAULT_PAGINATION_CLASS": "core.paginations.StandardPageNumberPagination",
 }
 
 SPECTACULAR_SETTINGS = {
@@ -123,7 +126,7 @@ DATABASES = {
     }
 }
 
-AUTH_USER_MODEL = "api.User"
+AUTH_USER_MODEL = "core.User"
 
 LANGUAGE_CODE = "ru-ru"
 TIME_ZONE = "Europe/Moscow"

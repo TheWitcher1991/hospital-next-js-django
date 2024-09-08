@@ -10,12 +10,14 @@ app_name = "config"
 
 urlpatterns = [
     path("api/admin/", admin.site.urls),
-    path("", include("django_prometheus.urls")),
-    path("api/", include("api.urls", namespace="api")),
+    path("api/", include("core.urls", namespace="core")),
+    path("api/", include("patient.urls", namespace="patient")),
+    path("api/", include("employee.urls", namespace="employee")),
     path("api/", include("business.urls", namespace="business")),
     path("v1/schema/", SpectacularAPIView.as_view(), name="schema"),
     path("v1/schema/swagger-ui/", SpectacularSwaggerView.as_view(url_name="schema"), name="swagger-ui"),
     path("v1/schema/redoc/", SpectacularRedocView.as_view(url_name="schema"), name="redoc"),
+    path("", include("django_prometheus.urls")),
 ]
 
 if settings.DEBUG:

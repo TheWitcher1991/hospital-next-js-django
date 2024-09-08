@@ -47,15 +47,15 @@ app.conf.task_queues = {
         routing_key=CELERY_QUEUE_DEFAULT,
     ),
     Queue(
-        "business",
-        Exchange("business"),
-        routing_key="business",
+        CELERY_QUEUE_BUSINESS,
+        Exchange(CELERY_QUEUE_BUSINESS),
+        routing_key=CELERY_QUEUE_BUSINESS,
     ),
 }
 
 app.conf.task_routes = {
-    "api.tasks.create_patient_balance_task": {"queue": CELERY_QUEUE_DEFAULT},
-    "api.tasks.delete_session_task": {"queue": CELERY_QUEUE_DEFAULT},
+    "patient.tasks.create_patient_balance_task": {"queue": CELERY_QUEUE_DEFAULT},
+    "core.tasks.delete_session_task": {"queue": CELERY_QUEUE_DEFAULT},
     "business.tasks.payment_create_task": {"queue": CELERY_QUEUE_BUSINESS},
     "business.tasks.payment_capture_task": {"queue": CELERY_QUEUE_BUSINESS},
     "business.tasks.payment_cancel_task": {"queue": CELERY_QUEUE_BUSINESS},
@@ -64,7 +64,7 @@ app.conf.task_routes = {
 
 app.conf.beat_schedule = {
     "check_expired_sessions": {
-        "task": "api.tasks.check_expired_sessions_task",
+        "task": "core.tasks.check_expired_sessions_task",
         "schedule": crontab(minute="*/120"),
         "options": {"queue": CELERY_QUEUE_DEFAULT},
     },

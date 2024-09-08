@@ -7,7 +7,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK, HTTP_400_BAD_REQUEST
 
-from api.mixins import AllowAnyMixin
+from core.mixins import AllowAnyMixin
 
 from .serializers import YookassaWebhookSerializer
 from .webhooks import BusinessWebHook
@@ -15,7 +15,7 @@ from .webhooks import BusinessWebHook
 logger = logging.getLogger("business")
 
 
-class YookassaWebhookView(GenericAPIView, AllowAnyMixin):
+class YookassaWebhookView(AllowAnyMixin, GenericAPIView):
     """
     Обработка вебхука от yookassa
     """
