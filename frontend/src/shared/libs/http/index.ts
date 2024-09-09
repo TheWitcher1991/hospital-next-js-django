@@ -44,6 +44,7 @@ type fetchCoreOptions = {
 	method?: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
 	token_type?: string
 	headers?: HeadersInit
+	body?: any
 	cache?: RequestCache
 	credentials?: RequestCredentials
 	isAuthorized?: boolean
@@ -53,6 +54,7 @@ export const fetchCore = async ({
 	url = '',
 	method = 'GET',
 	token_type = 'Bearer',
+	body = {},
 	mode = 'cors',
 	cache = 'default',
 	credentials = 'include',
@@ -69,6 +71,7 @@ export const fetchCore = async ({
 			}),
 			...headers,
 		},
+		body: JSON.stringify(body),
 		mode: mode,
 		cache: cache,
 		credentials: credentials,

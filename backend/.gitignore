@@ -1,0 +1,30 @@
+__pycache__/
+*.py[cod]
+*$py.class
+*.manifest
+*.spec
+pip-log.txt
+pip-delete-this-directory.txt
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.DS_Store
+*.sqlite3
+*.pyc
+*.db
+*.pid
+/static/admin/
+/static/debug_toolbar/
+/static/redisboard/
+/static/rest_framework/
+celerybeat-schedule
+supervisord.log
+supervisord.pid
+
+# Only for Development only
+# **/migrations/**
+# !**/migrations
+# !**/migrations/__init__.py

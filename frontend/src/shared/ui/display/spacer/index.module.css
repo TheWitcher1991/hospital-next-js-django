@@ -1,42 +1,42 @@
-.tab {
+.spacer {
     display: flex;
     width: 20px;
 }
 
-.tab__ml {
+.spacer__ml {
     display: flex;
     width: 30px;
 }
 
 
-.tab__s {
+.spacer__s {
     display: flex;
     width: 14px;
 }
 
 
-.tab__xs {
+.spacer__xs {
     display: flex;
     width: 8px;
 }
 
-.tab__xss {
+.spacer__xss {
     display: flex;
     margin: 4px;
 }
 
-.tab__l {
+.spacer__l {
     display: flex;
     width: 36px;
 }
 
 
-.tab__xl {
+.spacer__xl {
     display: flex;
     width: 50px;
 }
 
-.tab__xxl {
+.spacer__xxl {
     display: flex;
     width: 80px;
 }

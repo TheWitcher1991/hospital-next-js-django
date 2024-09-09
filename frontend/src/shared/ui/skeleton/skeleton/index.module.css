@@ -8,11 +8,6 @@
     animation: _1J0cNeRIbH 1.5s ease-in-out infinite;
 }
 
-.skeleton__white {
-    background: linear-gradient(100deg, #fff 30%, #d4d4d8 50%, #fff 70%);
-    background-size: 400%;
-}
-
 @keyframes _1J0cNeRIbH {
     0% {
         background-position: 100% 50%;

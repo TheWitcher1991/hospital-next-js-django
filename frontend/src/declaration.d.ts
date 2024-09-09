@@ -24,6 +24,8 @@ declare global {
 		children: React.ReactNode
 	}
 
+	type OmitClassName<T> = Omit<T, 'className'>
+
 	type DetailedDivProps = React.DetailedHTMLProps<
 		React.ButtonHTMLAttributes<HTMLDivElement>,
 		HTMLDivElement

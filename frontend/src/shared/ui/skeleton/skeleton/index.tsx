@@ -6,11 +6,10 @@ interface SkeletonProps {
 	width?: number
 	height?: number
 	maxHeight?: number
-	white?: boolean
 	maxWidth?: number
 }
 
-export const Skeleton: FC<SkeletonProps> = (props) => {
+export const Skeleton: FC<SkeletonProps> = props => {
 	const {
 		variant = 'text',
 		width = false,
@@ -32,7 +31,7 @@ export const Skeleton: FC<SkeletonProps> = (props) => {
 
 	return (
 		<div
-			className={`${styles.skeleton} ${white && styles.skeleton__white}`}
+			className={`${styles.skeleton}`}
 			style={{
 				width: width ? `${width}px` : '100%',
 				height: `${height}px`,

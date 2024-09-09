@@ -1,4 +1,4 @@
-import { HeaderMenuLink } from '@/widgets/header/HeaderMenu/index.types'
+import { HeaderMenuLink } from '@/widgets/header/header-menu/index.types'
 
 export const guestRoutes: HeaderMenuLink[] = [
 	{ to: '/', name: 'Главная' },

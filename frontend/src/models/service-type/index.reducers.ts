@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import { ServiceTypeState } from '@/models/service-type/index.types'
-import { fetchServiceTypes } from '@/models/service-type/index.service'
+import { fetchServiceTypes } from '@/models/service-type/index.thunks'
 import { stringIncludes } from '@/shared/utils'
 
 const initialState: ServiceTypeState = {
@@ -21,13 +21,13 @@ export const serviceTypeSlice = createSlice({
 			state.types = action.payload
 		},
 		filterTypes(state, action: PayloadAction<string>) {
-			state.types = state.types.filter((s) =>
+			state.types = state.types.filter(s =>
 				stringIncludes(s.name, action.payload),
 			)
 		},
 	},
-	extraReducers: (builder) => {
-		builder.addCase(fetchServiceTypes.pending, (state) => {
+	extraReducers: builder => {
+		builder.addCase(fetchServiceTypes.pending, state => {
 			state.isLoading = true
 			state.isError = false
 		})
@@ -37,7 +37,7 @@ export const serviceTypeSlice = createSlice({
 			state.types = action.payload
 			state.count = action.payload?.length || 0
 		})
-		builder.addCase(fetchServiceTypes.rejected, (state) => {
+		builder.addCase(fetchServiceTypes.rejected, state => {
 			state.isLoading = false
 			state.isError = true
 			state.types = []

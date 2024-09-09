@@ -8,3 +8,7 @@ export interface ILoginReturn {
 	expires: string
 	token_type: 'Bearer'
 }
+
+export interface AuthState {
+	isLoading: boolean
+}

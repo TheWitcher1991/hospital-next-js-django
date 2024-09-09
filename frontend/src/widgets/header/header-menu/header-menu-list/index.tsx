@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { HeaderMenuLink } from '@/widgets/header/HeaderMenu/index.types'
+import { HeaderMenuLink } from '@/widgets/header/header-menu/index.types'
 import Link from 'next/link'
 
 interface HeaderMenuListProps {

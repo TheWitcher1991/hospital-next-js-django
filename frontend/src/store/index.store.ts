@@ -14,6 +14,7 @@ import {
 	REGISTER,
 	persistStore,
 } from 'redux-persist'
+import { RootReducer } from '@/store/index.reducers'
 
 export const makeStore = () => {
 	return configureStore({
@@ -44,5 +45,5 @@ export const persistor = persistStore(store)
 setupListeners(store.dispatch)
 
 export type AppStore = ReturnType<typeof makeStore>
-export type RootState = ReturnType<typeof store.getState>
+export type RootState = ReturnType<typeof RootReducer>
 export type AppDispatch = AppStore['dispatch']
