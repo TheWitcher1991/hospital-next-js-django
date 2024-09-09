@@ -44,11 +44,12 @@ export const signupEmployee = createAsyncThunk<boolean, ICreateEmployee>(
 
 export const login = createAsyncThunk<ILoginReturn, ILogin>(
 	'auth/login',
-	async ({ email, password }, thunkApi) => {
+	async (data, thunkApi) => {
 		try {
 			const response = await fetchCore({
 				url: 'v1/login/',
 				method: 'POST',
+				body: data,
 			})
 			toastr.success('Вход', 'Успешно выполнен')
 			return (await response.json()) as ILoginReturn[]

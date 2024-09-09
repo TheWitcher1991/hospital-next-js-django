@@ -1,3 +1,5 @@
+'use client'
+
 import { FC, useId } from 'react'
 import { Input, InputProps, Label, LabelError } from '@/shared/ui'
 
