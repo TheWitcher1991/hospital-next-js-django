@@ -13,9 +13,7 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env.dev"))
 DEBUG = env.bool("DJANGO_DEBUG", default=True)
 SECRET_KEY = env("DJANGO_SECRET_KEY", default="django-strong-key")
 
-
 ALLOWED_HOSTS = ["*"] if DEBUG else env("ALLOWED_HOSTS").split(" ")
-
 
 DOMAIN_NAME = env("BACKEND_DOMAIN")
 CLIENT_DOMAIN = env("CLIENT_DOMAIN")
