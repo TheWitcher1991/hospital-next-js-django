@@ -17,16 +17,8 @@ SECRET_KEY = env("DJANGO_SECRET_KEY", default="django-strong-key")
 ALLOWED_HOSTS = ["*"] if DEBUG else env("ALLOWED_HOSTS").split(" ")
 
 
-DOMAIN_NAME = "http://localhost:8080"
-
-SECURE_SSL_REDIRECT = not DEBUG
-CSRF_HEADER_NAME = "X-CSRFToken"
-CSRF_COOKIE_NAME = "csrftoken"
-CSRF_COOKIE_SAMESITE = "Lax"
-SESSION_COOKIE_SAMESITE = "Lax"
-CSRF_COOKIE_SECURE = True
-CSRF_COOKIE_HTTPONLY = True
-SESSION_COOKIE_HTTPONLY = True
+DOMAIN_NAME = env("BACKEND_DOMAIN")
+CLIENT_DOMAIN = env("CLIENT_DOMAIN")
 
 INSTALLED_APPS = [
     "corsheaders",
@@ -36,6 +28,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django.contrib.postgres",
     "django_redis",
     "django_prometheus",
     "rest_framework",
@@ -87,8 +80,6 @@ TEMPLATES = [
     },
 ]
 
-# REST framework
-
 REST_FRAMEWORK = {
     "DEFAULT_RENDERER_CLASSES": [
         "rest_framework.renderers.JSONRenderer",
@@ -119,12 +110,28 @@ SPECTACULAR_SETTINGS = {
     "SERVE_INCLUDE_SCHEMA": False,
 }
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
+DATABASE_ENGINE = env("DATABASE_ENGINE", default="django.db.backends.sqlite3")
+
+if DATABASE_ENGINE == "django.db.backends.sqlite3":
+    DATABASES = {
+        "default": {
+            "ENGINE": DATABASE_ENGINE,
+            "NAME": BASE_DIR / "db.sqlite3",
+        }
     }
-}
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": DATABASE_ENGINE,
+            "NAME": env("POSTGRES_DB", default=os.path.join(BASE_DIR, "db.sqlite3")),
+            "USER": env("POSTGRES_USER", default="postgres"),
+            "PASSWORD": env("POSTGRES_PASSWORD", default="root"),
+            "HOST": env("POSTGRES_HOST", default="localhost"),
+            "PORT": env("POSTGRES_PORT", default="5432"),
+            "OPTIONS": {},
+        },
+    }
+
 
 AUTH_USER_MODEL = "core.User"
 
@@ -133,21 +140,57 @@ TIME_ZONE = "Europe/Moscow"
 USE_I18N = True
 USE_L10N = True
 
-CORS_ALLOW_ALL_ORIGINS = True
+SECURE_HSTS_PRELOAD = not DEBUG
+SECURE_SSL_REDIRECT = not DEBUG
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_SECONDS = 0 if DEBUG else 31536000
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https") if not DEBUG else None
+
+X_FRAME_OPTIONS = "DENY"
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_REFERRER_POLICY = "same-origin"
+
+SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = "Lax"
+
+CSRF_COOKIE_AGE = 31449600
+CSRF_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_NAME = "csrftoken"
+CSRF_COOKIE_SECURE = not DEBUG
+CSRF_COOKIE_HTTPONLY = not DEBUG
+CSRF_HEADER_NAME = "X-CSRFToken"
+
+CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_ALLOW_ALL = False
 CORS_ORIGIN_WHITELIST = env("ALLOWED_HOSTS").split(" ")
 CSRF_TRUSTED_ORIGINS = env("ALLOWED_HOSTS").split(" ")
 CORS_EXPOSE_HEADERS = ["Content-Type", "X-CSRFToken"]
 CORS_ALLOW_METHODS = ["DELETE", "GET", "OPTIONS", "PATCH", "POST", "PUT"]
-CORS_ALLOW_HEADERS = default_headers + ("http-x-role",)
+CORS_ALLOW_HEADERS = default_headers + ("http-x-role", "Content-Disposition")
 
 REDIS_HOST = env("REDIS_HOST", default="redis")
 REDIS_PORT = env("REDIS_PORT", default=6379)
 REDIS_PASSWORD = env("REDIS_PASSWORD", default=None)
 REDIS_DB = 0
 
-REDIS_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"
+if REDIS_PASSWORD:
+    REDIS_URL = f"redis://:{REDIS_PASSWORD}@{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"
+else:
+    REDIS_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"
+
+RABBITMQ_USER = env("RABBITMQ_USER", default=None)
+RABBITMQ_PASSWORD = env("RABBITMQ_PASSWORD", default=None)
+RABBITMQ_HOST = env("RABBITMQ_HOST", default="rabbitmq")
+RABBITMQ_PORT = env("RABBITMQ_PORT", default=5672)
+RABBITMQ_VHOST = env("RABBITMQ_VHOST", default="/")
+
+if RABBITMQ_USER and RABBITMQ_PASSWORD:
+    RABBITMQ_URL = f"amqp://{RABBITMQ_USER}:{RABBITMQ_PASSWORD}@{RABBITMQ_HOST}:{RABBITMQ_PORT}/{RABBITMQ_VHOST}"
+else:
+    RABBITMQ_URL = f"amqp://{RABBITMQ_HOST}:{RABBITMQ_PORT}/{RABBITMQ_VHOST}"
 
 CACHES = {
     "default": {
@@ -164,8 +207,8 @@ CACHE_MIDDLEWARE_SECONDS = 60 * 15
 CACHE_MIDDLEWARE_KEY_PREFIX = "hospital"
 CACHE_TTL = 60 * 15
 
-CELERY_BROKER_URL = env("CELERY_BROKER_URL", default=REDIS_URL)
-CELERY_RESULT_BACKEND = env("CELERY_BROKER", default=REDIS_URL)
+CELERY_BROKER_URL = RABBITMQ_URL
+CELERY_RESULT_BACKEND = RABBITMQ_URL
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"

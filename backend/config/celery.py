@@ -26,10 +26,7 @@ app.conf.worker_prefetch_multiplier = 1
 app.conf.worker_max_tasks_per_child = 5
 app.conf.task_acks_late = False
 
-# TODO: может перенести на rabbitmq?
 app.conf.broker_transport_options = {
-    "priority_steps": list(range(MAX_TASK_PRIORITY)),
-    "queue_order_strategy": "priority",
     "visibility_timeout": 3600,
 }
 
@@ -39,17 +36,22 @@ CELERY_QUEUE_BUSINESS = "business"
 app.conf.task_default_queue = CELERY_QUEUE_DEFAULT
 app.conf.task_default_exchange_type = "direct"
 app.conf.task_default_routing_key = CELERY_QUEUE_DEFAULT
+app.conf.task_queue_max_priority = 10
+app.conf.task_default_priority = 5
+
 
 app.conf.task_queues = {
     Queue(
         CELERY_QUEUE_DEFAULT,
         Exchange(CELERY_QUEUE_DEFAULT),
         routing_key=CELERY_QUEUE_DEFAULT,
+        queue_arguments={'x-max-priority': 5}
     ),
     Queue(
         CELERY_QUEUE_BUSINESS,
         Exchange(CELERY_QUEUE_BUSINESS),
         routing_key=CELERY_QUEUE_BUSINESS,
+        queue_arguments={'x-max-priority': 10}
     ),
 }
 
@@ -100,7 +102,3 @@ if DEBUG:
     @after_setup_task_logger.connect
     def setup_task_loggers(logger, *args, **kwargs):
         logger.info("Celery task logger is set up.")
-
-
-app.conf.timezone = "Europe/Moscow"
-app.conf.enable_utc = True
