@@ -27,7 +27,7 @@ services:
       retries: 5s
 
   rabbitmq:
-    image: rabbitmq:3-management
+    image: rabbitmq:3-management-alpine
     container_name: rabbitmq-service
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq

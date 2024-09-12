@@ -7,8 +7,15 @@ from rest_framework.exceptions import ValidationError
 
 from config import settings
 
-from .models import *
+from .models import Cabinet, PatientType, Position, ServiceType, Session, User
 from .utils import get_client_ip, jwt_encode
+
+
+class SessionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Session
+        fields = "__all__"
+        read_only_fields = ("id", "created")
 
 
 class BaseLoginSerializer(serializers.Serializer):
@@ -108,16 +115,58 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    role = serializers.CharField(source="get_role_display")
-    gender = serializers.CharField(source="get_gender_display")
-    password = serializers.CharField(read_only=True)
 
     class Meta:
         model = User
-        fields = "__all__"
+        fields = [
+            "id",
+            "email",
+            "phone",
+            "first_name",
+            "last_name",
+            "patronymic",
+            "age",
+            "date",
+            "gender",
+            "role",
+            "date_joined",
+            "updated_at",
+            "is_active",
+            "is_staff",
+            "is_online",
+            "last_online",
+        ]
+        read_only_fields = [
+            "id",
+            "created",
+            "role",
+            "email",
+            "is_active",
+            "is_staff",
+            "is_online",
+            "last_online",
+        ]
 
 
 class ServiceTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = ServiceType
+        fields = "__all__"
+
+
+class PatientTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PatientType
+        fields = "__all__"
+
+
+class CabinetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cabinet
+        fields = "__all__"
+
+
+class PositionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Position
         fields = "__all__"

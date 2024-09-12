@@ -1,20 +1,20 @@
 # API сотрудника
-### POST запросы
+## POST запросы
+```mermaid
+flowchart TD
+POST --> logout
+```
+## GET запросы
 ```mermaid
 flowchart TD
     
 ```
-### GET запросы
+## PUT/PATCH запросы
 ```mermaid
 flowchart TD
     
 ```
-### PUT/PATCH запросы
-```mermaid
-flowchart TD
-    
-```
-### DELETE запросы
+## DELETE запросы
 ```mermaid
 flowchart TD
     

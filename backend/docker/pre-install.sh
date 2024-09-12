@@ -4,7 +4,7 @@ echo "Installing linux dependencies"
 
 apt-get update
 
-apt-get install -y \
+apt-get install -y --no-install-recommends \
     netcat-traditional \
     libpq-dev \
     build-essential \

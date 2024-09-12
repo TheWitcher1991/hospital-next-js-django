@@ -4,4 +4,6 @@ from . import views
 
 app_name = "employee"
 
-urlpatterns = []
+urlpatterns = [
+    path("v1/services/", views.ServiceAPIView.as_view(), name="services"),
+]

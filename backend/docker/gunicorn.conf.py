@@ -6,9 +6,9 @@ bind = "0.0.0.0:5000"
 
 loglevel = "warning"
 
-workers = multiprocessing.cpu_count() * 2 + 1
+workers = multiprocessing.cpu_count() * 2
 
-threads = 2
+threads = multiprocessing.cpu_count()
 
 max_requests = 1000
 max_requests_jitter = 50

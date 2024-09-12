@@ -1,20 +1,33 @@
-from django.contrib.auth import logout
-from django.core.exceptions import ObjectDoesNotExist
-from django.utils.decorators import method_decorator
-from django.views.decorators.csrf import ensure_csrf_cookie
+from django.contrib.auth.models import AnonymousUser
+from rest_framework.exceptions import NotFound
 from rest_framework.generics import GenericAPIView
-from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
-from rest_framework.status import HTTP_200_OK, HTTP_403_FORBIDDEN, HTTP_404_NOT_FOUND
-from rest_framework.views import APIView
+from rest_framework.status import (
+    HTTP_200_OK,
+    HTTP_400_BAD_REQUEST,
+    HTTP_401_UNAUTHORIZED,
+    HTTP_403_FORBIDDEN,
+    HTTP_404_NOT_FOUND,
+)
 
-from employee.serializers import ServiceSerializer
+from config import settings
 
-from .mixins import AllowAnyMixin
-from .serializers import *
+from .authentication import RefreshTokenAuthentication
+from .mixins import GenericAllowAnyMixin, ListEntityCacheMixin
+from .models import Cabinet, PatientType, Position, ServiceType, Session, User
+from .permissions import IsAuthenticated
+from .serializers import (
+    CabinetSerializer,
+    LoginSerializer,
+    PatientTypeSerializer,
+    PositionSerializer,
+    ServiceTypeSerializer,
+    SessionSerializer,
+)
+from .utils import force_logout, jwt_encode, jwt_is_valid
 
 
-class LoginAPIView(GenericAPIView, AllowAnyMixin):
+class LoginAPIView(GenericAllowAnyMixin):
 
     queryset = User.objects.all()
     serializer_class = LoginSerializer
@@ -31,9 +44,7 @@ class LoginAPIView(GenericAPIView, AllowAnyMixin):
         if user.is_staff or user.is_superuser:
             return Response({"msg": "user is not an employer"}, status=HTTP_403_FORBIDDEN)
 
-        serializer = self.serializer_class(
-            data={"email": email, "password": password}, context={"request": self.request}
-        )
+        serializer = self.get_serializer(data={"email": email, "password": password}, context={"request": self.request})
         serializer.is_valid(raise_exception=True)
 
         refresh_token = serializer.data.pop("refresh_token", None)
@@ -52,64 +63,76 @@ class LoginAPIView(GenericAPIView, AllowAnyMixin):
         return response
 
 
-class LogoutView(APIView):
-    def post(self, request):
-        logout(request)
-        return Response({"detail": "Successfully logged out."})
+class RefreshTokenUpdateAPIView(GenericAPIView):
+    """
+    Получение нового токена авторизации
+    """
 
+    queryset = Session.objects.all()
+    serializer_class = SessionSerializer
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (RefreshTokenAuthentication,)
 
-class AuthenticateView(APIView):
-    permission_classes = (AllowAny,)
-    authentication_classes = ()
+    def put(self, request, *args, **kwargs):
+        refresh_token = request.COOKIES["refresh_token"]
 
-    @method_decorator(ensure_csrf_cookie)
-    def get(self, request):
-        if not request.user.is_authenticated:
-            return Response({"isAuthenticated": False})
+        if not refresh_token:
+            return Response({"msg": "Refresh token is required"}, status=HTTP_400_BAD_REQUEST)
 
-        return Response({"isAuthenticated": True})
-
-
-class ServiceTypeListView(APIView):
-    def get(self, request):
-        serviceType = ServiceType.objects.all()
-        serializer = ServiceTypeSerializer(serviceType, many=True)
-        return Response(serializer.data)
-
-    def post(self, request):
-        serializer = ServiceSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=201)
-        return Response(serializer.errors, status=404)
-
-
-class ServiceTypeDetailView(APIView):
-    def get_object(self, pk):
         try:
-            return ServiceType.objects.get(pk=pk)
-        except ObjectDoesNotExist:
-            return Response(status=404)
+            session = self.queryset.filter(refresh_token=refresh_token).first()
+        except Session.DoesNotExist:
+            return Response({"msg": "Invalid refresh token"}, status=HTTP_401_UNAUTHORIZED)
 
-    def get(self, request, pk):
-        serviceType = self.get_object(pk)
-        serializer = ServiceTypeSerializer(serviceType)
-        return Response(serializer.data)
+        if not jwt_is_valid(refresh_token):
+            force_logout(request)
+            request.user = AnonymousUser()
+            return Response({"msg": "Session has expired. Logout"}, status=HTTP_401_UNAUTHORIZED)
 
-    def put(self, request, pk):
-        serviceType = self.get_object(pk)
-        serializer = ServiceTypeSerializer(serviceType, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=400)
+        access_token = jwt_encode(session.user, is_refresh=False)
+        session.access_token = access_token
+        session.save()
 
-    def delete(self, request, pk):
-        serviceType = self.get_object(pk)
-        serviceType.delete()
-        return Response(status=204)
+        return Response(
+            {
+                "access_token": access_token,
+            },
+            status=HTTP_200_OK,
+        )
 
 
-# class ServiceTypeView(generics.ListAPIView):
-#     queryset = ServiceType.objects.all()
-#     serializer_class = ServiceTypeSerializer
+class LogoutAPIView(GenericAPIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs) -> Response:
+        try:
+            force_logout(self.request)
+            return Response({"isAuthenticated": False}, status=HTTP_200_OK)
+        except NotFound as e:
+            return Response({"detail": str(e)}, status=HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"detail": "An unexpected error occurred."}, status=HTTP_400_BAD_REQUEST)
+
+
+class ServiceTypeAPIView(ListEntityCacheMixin):
+    queryset = ServiceType.objects.all()
+    serializer_class = ServiceTypeSerializer
+    tag_cache = "service-type-list"
+
+
+class PatientTypeAPIView(ListEntityCacheMixin):
+    queryset = PatientType.objects.all()
+    serializer_class = PatientTypeSerializer
+    tag_cache = "patient-type-list"
+
+
+class CabinetAPIView(ListEntityCacheMixin):
+    queryset = Cabinet.objects.all()
+    serializer_class = CabinetSerializer
+    tag_cache = "cabinet-type-list"
+
+
+class PositionAPIView(ListEntityCacheMixin):
+    queryset = Position.objects.all()
+    serializer_class = PositionSerializer
+    tag_cache = "position-list"

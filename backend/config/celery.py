@@ -6,9 +6,10 @@ from celery import Celery, Task, current_app
 from celery.result import AsyncResult
 from celery.schedules import crontab
 from celery.signals import after_setup_logger, after_setup_task_logger
-from kombu import Exchange, Queue
 
 from config.settings import DEBUG
+from core.defines import CeleryQueue
+from core.utils import create_celery_queue
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings")
 
@@ -30,45 +31,33 @@ app.conf.broker_transport_options = {
     "visibility_timeout": 3600,
 }
 
-CELERY_QUEUE_DEFAULT = "default"
-CELERY_QUEUE_BUSINESS = "business"
-
-app.conf.task_default_queue = CELERY_QUEUE_DEFAULT
+app.conf.task_default_queue = CeleryQueue.DEFAULT
 app.conf.task_default_exchange_type = "direct"
-app.conf.task_default_routing_key = CELERY_QUEUE_DEFAULT
-app.conf.task_queue_max_priority = 10
-app.conf.task_default_priority = 5
-
+app.conf.task_default_routing_key = CeleryQueue.DEFAULT
+app.conf.task_queue_max_priority = MAX_TASK_PRIORITY
+app.conf.task_default_priority = DEFAULT_TASK_PRIORITY
 
 app.conf.task_queues = {
-    Queue(
-        CELERY_QUEUE_DEFAULT,
-        Exchange(CELERY_QUEUE_DEFAULT),
-        routing_key=CELERY_QUEUE_DEFAULT,
-        queue_arguments={'x-max-priority': 5}
-    ),
-    Queue(
-        CELERY_QUEUE_BUSINESS,
-        Exchange(CELERY_QUEUE_BUSINESS),
-        routing_key=CELERY_QUEUE_BUSINESS,
-        queue_arguments={'x-max-priority': 10}
-    ),
+    create_celery_queue(CeleryQueue.DEFAULT),
+    create_celery_queue(CeleryQueue.PATIENT),
+    create_celery_queue(CeleryQueue.EMPLOYEE),
+    create_celery_queue(CeleryQueue.BUSINESS, MAX_TASK_PRIORITY),
 }
 
 app.conf.task_routes = {
-    "patient.tasks.create_patient_balance_task": {"queue": CELERY_QUEUE_DEFAULT},
-    "core.tasks.delete_session_task": {"queue": CELERY_QUEUE_DEFAULT},
-    "business.tasks.payment_create_task": {"queue": CELERY_QUEUE_BUSINESS},
-    "business.tasks.payment_capture_task": {"queue": CELERY_QUEUE_BUSINESS},
-    "business.tasks.payment_cancel_task": {"queue": CELERY_QUEUE_BUSINESS},
-    "business.tasks.payment_find_one_task": {"queue": CELERY_QUEUE_BUSINESS},
+    "core.tasks.delete_session_task": {"queue": CeleryQueue.DEFAULT},
+    "patient.tasks.create_patient_balance_task": {"queue": CeleryQueue.PATIENT},
+    "business.tasks.payment_create_task": {"queue": CeleryQueue.BUSINESS},
+    "business.tasks.payment_capture_task": {"queue": CeleryQueue.BUSINESS},
+    "business.tasks.payment_cancel_task": {"queue": CeleryQueue.BUSINESS},
+    "business.tasks.payment_find_one_task": {"queue": CeleryQueue.BUSINESS},
 }
 
 app.conf.beat_schedule = {
     "check_expired_sessions": {
         "task": "core.tasks.check_expired_sessions_task",
         "schedule": crontab(minute="*/120"),
-        "options": {"queue": CELERY_QUEUE_DEFAULT},
+        "options": {"queue": CeleryQueue.DEFAULT},
     },
 }
 

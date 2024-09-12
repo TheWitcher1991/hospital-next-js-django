@@ -17,11 +17,11 @@ from .managers import (
 
 
 class Patient(models.Model):
-    address = models.CharField(_("Адрес"), max_length=256)
+    address = models.CharField(_("Адрес"), max_length=256, blank=True, null=True)
     oms = models.CharField(_("ОМС"), max_length=16)
-    snils = models.CharField(_("СНИЛС"), max_length=16)
-    inn = models.CharField(_("ИНН"), max_length=12)
-    passport = models.CharField(_("Паспорт"), max_length=128)
+    snils = models.CharField(_("СНИЛС"), max_length=16, blank=True, null=True)
+    inn = models.CharField(_("ИНН"), max_length=12, blank=True, null=True)
+    passport = models.CharField(_("Паспорт"), max_length=128, blank=True, null=True)
     user = models.OneToOneField(to="core.User", on_delete=models.CASCADE, related_name="patient")
     patient_type = models.ForeignKey(to="core.PatientType", on_delete=models.CASCADE, related_name="patients")
 
