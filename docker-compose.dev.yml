@@ -1,0 +1,60 @@
+name: hospital-dev
+
+services:
+  postgres:
+    extends:
+      file: ./docker-compose.base.yml
+      service: postgres
+    ports:
+      - 5432:5432
+    env_file:
+      - ./backend/.env.dev
+
+  redis:
+    extends:
+      file: ./docker-compose.base.yml
+      service: redis
+    ports:
+      - 6379:6379
+    env_file:
+      - ./backend/.env.dev
+
+  rabbitmq:
+    extends:
+      file: ./docker-compose.base.yml
+      service: rabbitmq
+    ports:
+      - 5672:5672
+      - 15672:15672
+    env_file:
+      - ./backend/.env.dev
+
+  backend:
+    extends:
+      file: ./docker-compose.base.yml
+      service: backend
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+    ports:
+      - 5000:5000
+      - 5555:5555
+
+  frontend:
+    extends:
+      file: ./docker-compose.base.yml
+      service: frontend
+    build:
+      context: ./frontend
+      dockerfile: ./docker/dev.Dockerfile
+    ports:
+      - 3000:3000
+
+  redisinsight:
+    extends:
+      file: ./docker-compose.base.yml
+      service: redisinsight
+    ports:
+      - 5540:5540
+    env_file:
+      - ./backend/.env.dev

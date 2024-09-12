@@ -1,0 +1,87 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres-service
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - default-network
+    restart: on-failure
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready"]
+      interval: 5s
+      timeout: 5s
+
+  redis:
+    image: redis:7.4.0-alpine
+    container_name: redis-service
+    volumes:
+      - redis_data:/data
+    networks:
+      - default-network
+    restart: on-failure
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 3s
+      timeout: 10s
+      retries: 5s
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-service
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - default-network
+    restart: on-failure
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 3s
+      timeout: 10s
+      retries: 5s
+
+  frontend:
+    container_name: frontend-service
+    networks:
+      - default-network
+    restart: on-failure
+
+  backend:
+    container_name: backend-service
+    volumes:
+        - static_data:/app/static
+        - media_data:/app/media
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - default-network
+    restart: on-failure
+
+  redisinsight:
+    image: redis/redisinsight:2.54.0
+    container_name: redisinsight-service
+    volumes:
+      - redisinsight_data:/db
+    depends_on:
+      redis:
+        condition: service_healthy
+    networks:
+      - default-network
+    restart: on-failure
+
+networks:
+  default-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:
+  static_data:
+  media_data:
+  redisinsight_data:

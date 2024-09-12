@@ -1,0 +1,93 @@
+name: hospital-prod
+
+services:
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx-service
+    volumes:
+      - ./deploy/nginx.conf:/etc/nginx/nginx.conf
+      - /etc/letsencrypt:/etc/letsencrypt
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - backend
+      - frontend
+    networks:
+      - default-network
+    restart: on-failure
+
+  postgres:
+    extends:
+      file: ./docker-compose.base.yml
+      service: postgres
+    env_file:
+      - ./backend/.env.prod
+
+  redis:
+    extends:
+      file: ./docker-compose.base.yml
+      service: redis
+    env_file:
+      - ./backend/.env.prod
+
+  rabbitmq:
+    extends:
+      file: ./docker-compose.base.yml
+      service: rabbitmq
+    env_file:
+      - ./backend/.env.prod
+
+  backend:
+    extends:
+      file: ./docker-compose.base.yml
+      service: backend
+    build:
+      context: ./backend
+      dockerfile: ./Dockerfile
+
+  frontend:
+    extends:
+      file: ./docker-compose.base.yml
+      service: frontend
+    build:
+      context: ./frontend
+      dockerfile: ./Dockerfile
+
+  redisinsight:
+    extends:
+      file: ./docker-compose.base.yml
+      service: redisinsight
+    env_file:
+      - ./backend/.env.prod
+
+  pgadmin:
+    image: dpage/pgadmin4:8.11.0
+    container_name: pgadmin
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - backend/.env.prod
+    networks:
+      - default-network
+    restart: on-failure
+
+  prometheus:
+    image: prom/prometheus:v2.54.1
+    container_name: prometheus-service
+    volumes:
+      - ./deploy/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--web.console.libraries=/etc/prometheus/console_libraries"
+      - "--web.console.templates=/etc/prometheus/consoles"
+      - "--log.level=warn"
+    networks:
+      - default-network
+    restart: on-failure
+
+networks:
+  default-network:
+    driver: bridge
