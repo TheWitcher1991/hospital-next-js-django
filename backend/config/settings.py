@@ -34,10 +34,12 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "redisboard",
     "drf_spectacular",
+    "graphene_django",
     "core",
     "patient",
     "employee",
     "business",
+    "graphql",
 ]
 
 MIDDLEWARE = [
@@ -107,6 +109,8 @@ SPECTACULAR_SETTINGS = {
     "VERSION": "1.0.0",
     "SERVE_INCLUDE_SCHEMA": False,
 }
+
+GRAPHENE = {"SCHEMA": "config.schema.schema"}
 
 DATABASE_ENGINE = env("DATABASE_ENGINE", default="django.db.backends.sqlite3")
 
