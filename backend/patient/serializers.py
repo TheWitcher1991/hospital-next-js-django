@@ -5,19 +5,42 @@ from core.defines import Role
 from core.models import User
 from core.serializers import PatientTypeSerializer, UserSerializer
 from core.utils import get_client_ip
-from patient.models import Patient, PatientPhone
+from patient.models import Agreement, Patient, PatientCart, PatientPhone, Talon
 
 
 class PatientPhoneSerializer(serializers.ModelSerializer):
     class Meta:
         model = PatientPhone
         fields = "__all__"
+        read_only_fields = ("id",)
 
 
 class PatientSignatureSerializer(serializers.ModelSerializer):
     class Meta:
         model = PatientPhone
         fields = "__all__"
+        read_only_fields = ("id",)
+
+
+class PatientCartSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = PatientCart
+        fields = "__all__"
+        read_only_fields = ("id",)
+
+
+class TalonSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Talon
+        fields = "__all__"
+        read_only_fields = ("id",)
+
+
+class AgreementSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Agreement
+        fields = "__all__"
+        read_only_fields = ("id",)
 
 
 class PatientSerializer(serializers.ModelSerializer):
@@ -28,6 +51,7 @@ class PatientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Patient
         fields = "__all__"
+        read_only_fields = ("id",)
 
 
 class OwnerPatientSerializer(PatientSerializer):

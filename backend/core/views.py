@@ -13,6 +13,7 @@ from rest_framework.status import (
 from config import settings
 
 from .authentication import RefreshTokenAuthentication
+from .filters import CabinetFilter, ServiceTypeFilter
 from .mixins import GenericAllowAnyMixin, ListEntityCacheMixin
 from .models import Cabinet, PatientType, Position, ServiceType, Session, User
 from .permissions import IsAuthenticated
@@ -117,6 +118,7 @@ class LogoutAPIView(GenericAPIView):
 class ServiceTypeAPIView(ListEntityCacheMixin):
     queryset = ServiceType.objects.all()
     serializer_class = ServiceTypeSerializer
+    filterset_class = ServiceTypeFilter
     tag_cache = "service-type-list"
 
 
@@ -129,6 +131,7 @@ class PatientTypeAPIView(ListEntityCacheMixin):
 class CabinetAPIView(ListEntityCacheMixin):
     queryset = Cabinet.objects.all()
     serializer_class = CabinetSerializer
+    filterset_class = CabinetFilter
     tag_cache = "cabinet-type-list"
 
 

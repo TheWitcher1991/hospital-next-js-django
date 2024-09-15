@@ -3,9 +3,18 @@ from rest_framework.status import HTTP_201_CREATED
 
 from core.mixins import CreateAllowAnyMixin
 
-from .mixins import PatientReadOnlyViewSetMixin, PatientViewMixin, PatientViewSetMixin
+from .filters import AgreementFilter, PatientCartFilter, TalonFilter
+from .mixins import PatientControlViewMixin, PatientReadOnlyViewSetMixin, PatientViewSetMixin
 from .models import Agreement, Patient, PatientCart, PatientPhone, PatientSignature, Talon
-from .serializers import CreatePatientSerializer, UpdatePatientSerializer
+from .serializers import (
+    AgreementSerializer,
+    CreatePatientSerializer,
+    PatientPhoneSerializer,
+    PatientSerializer,
+    PatientSignatureSerializer,
+    TalonSerializer,
+    UpdatePatientSerializer,
+)
 
 
 class SignupPatientAPIView(CreateAllowAnyMixin):
@@ -20,38 +29,40 @@ class SignupPatientAPIView(CreateAllowAnyMixin):
 
 class PatientCartViewSet(PatientViewSetMixin):
     queryset = PatientCart.objects.all()
+    serializer_class = PatientPhoneSerializer
+    filterset_class = PatientCartFilter
 
 
 class PatientPhoneViewSet(PatientViewSetMixin):
     queryset = PatientPhone.objects.all()
+    serializer_class = PatientPhoneSerializer
 
 
 class PatientSignatureViewSet(PatientViewSetMixin):
     queryset = PatientSignature.objects.all()
+    serializer_class = PatientSignatureSerializer
 
 
 class PatientAgreementViewSet(PatientReadOnlyViewSetMixin):
     queryset = Agreement.objects.all()
+    serializer_class = AgreementSerializer
+    filterset_class = AgreementFilter
+    patient_field = "patient_cart__patient_id"
 
 
 class PatientTalonViewSet(PatientReadOnlyViewSetMixin):
     queryset = Talon.objects.all()
+    serializer_class = TalonSerializer
+    filterset_class = TalonFilter
+    patient_field = "agreement__patient_cart__patient_id"
 
 
-class PatientAPIView(PatientViewMixin):
+class PatientAPIView(PatientControlViewMixin):
     queryset = Patient.objects.all()
-    serializer_class = UpdatePatientSerializer()
+    serializer_class = PatientSerializer()
+    patient_field = "id"
 
-    def put(self, request, *args, **kwargs):
-        partial = kwargs.pop("partial", False)
-        serializer = self.get_serializer(instance=self.patient, data=request.data, partial=partial)
-        serializer.is_valid(raise_exception=True)
-        self.perform_update(serializer)
-        return Response(serializer.data)
-
-    def perform_update(self, serializer):
-        serializer.save()
-
-    def patch(self, request, *args, **kwargs):
-        kwargs["partial"] = True
-        return self.put(request, *args, **kwargs)
+    def get_serializer_class(self):
+        if self.request.method in ["PATCH", "PUT"]:
+            return UpdatePatientSerializer
+        return super().get_serializer_class()

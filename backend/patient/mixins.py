@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 from django.db.models import QuerySet
 from rest_framework.exceptions import NotFound
-from rest_framework.generics import GenericAPIView
+from rest_framework.generics import GenericAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from patient.models import Patient
@@ -19,6 +19,7 @@ else:
 
 class PatientMixin:
     permission_classes = (IsPatient,)
+    patient_field: str = "patient_id"
 
     @cached_property
     def patient(self) -> Patient:
@@ -29,18 +30,25 @@ class PatientMixin:
 
     def get_queryset(self) -> QuerySet:
         try:
-            return super().get_queryset().filter(patient=self.patient)
+            if self.patient_field == "patient_id":
+                return super().get_queryset().filter(patient_id=self.patient.id)
+            else:
+                return super().get_queryset().filter(**{self.patient_field: self.patient.id})
         except NotImplementedError:
             pass
 
 
-class PatientViewMixin(GenericAPIView, PatientMixin):
+class PatientViewMixin(PatientMixin, GenericAPIView):
     pass
 
 
-class PatientViewSetMixin(_ModelViewSet, PatientMixin):
+class PatientControlViewMixin(PatientMixin, RetrieveUpdateDestroyAPIView):
     pass
 
 
-class PatientReadOnlyViewSetMixin(_ReadOnlyModelViewSet, PatientMixin):
+class PatientViewSetMixin(PatientMixin, ModelViewSet):
+    pass
+
+
+class PatientReadOnlyViewSetMixin(PatientMixin, ReadOnlyModelViewSet):
     pass
