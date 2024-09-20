@@ -29,6 +29,22 @@ services:
     env_file:
       - ./backend/.env.dev
 
+  zookeeper:
+    extends:
+      file: ./docker-compose.base.yml
+      service: zookeeper
+    ports:
+      - 2181:2181
+
+  kafka:
+    extends:
+      file: ./docker-compose.base.yml
+      service: kafka
+    ports:
+      - 9092:9092
+      - 29092:29092
+      - 29095:29095
+
   backend:
     extends:
       file: ./docker-compose.base.yml

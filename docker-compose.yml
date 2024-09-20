@@ -38,6 +38,20 @@ services:
     env_file:
       - ./backend/.env.prod
 
+  zookeeper:
+    extends:
+      file: ./docker-compose.base.yml
+      service: zookeeper
+    env_file:
+      - ./backend/.env.prod
+
+  kafka:
+    extends:
+      file: ./docker-compose.base.yml
+      service: kafka
+    env_file:
+      - ./backend/.env.prod
+
   backend:
     extends:
       file: ./docker-compose.base.yml

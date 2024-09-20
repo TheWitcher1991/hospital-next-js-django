@@ -8,7 +8,7 @@ services:
       - default-network
     restart: on-failure
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready"]
+      test: [ "CMD-SHELL", "pg_isready" ]
       interval: 5s
       timeout: 5s
 
@@ -35,10 +35,38 @@ services:
       - default-network
     restart: on-failure
     healthcheck:
-      test: ["CMD", "rabbitmqctl", "status"]
+      test: [ "CMD", "rabbitmqctl", "status" ]
       interval: 3s
       timeout: 10s
       retries: 5s
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.7.1
+    container_name: zookeeper-service
+    networks:
+      - default-network
+    restart: always
+
+  kafka:
+    image: confluentinc/cp-kafka:7.7.1
+    container_name: kafka-service
+    hostname: kafka
+    depends_on:
+      - zookeeper:
+          condition: service_started
+    networks:
+      - default-network
+    restart: always
+
+  kafka_ui:
+    image: provectuslabs/kafka-ui:v0.7.2
+    container_name: kafka-ui-service
+    depends_on:
+      - kafka:
+          condition: service_started
+    networks:
+      - default-network
+    restart: always
 
   frontend:
     container_name: frontend-service
@@ -49,8 +77,8 @@ services:
   backend:
     container_name: backend-service
     volumes:
-        - static_data:/app/static
-        - media_data:/app/media
+      - static_data:/app/static
+      - media_data:/app/media
     depends_on:
       postgres:
         condition: service_healthy
@@ -58,6 +86,8 @@ services:
         condition: service_healthy
       redis:
         condition: service_healthy
+      kafka:
+        condition: service_started
     networks:
       - default-network
     restart: on-failure
