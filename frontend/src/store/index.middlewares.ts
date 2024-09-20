@@ -14,6 +14,8 @@ import { PatientCartApi } from '@/models/patient-cart'
 import { PatientPhoneApi } from '@/models/patient-phone'
 import { PatientSignatureApi } from '@/models/patient-signature'
 import { PatientBalanceApi } from '@/models/patient-balance'
+import { PatientInvoiceApi } from '@/models/patient-invoice'
+import { PatientTransactionApi } from '@/models/patient-transaction'
 import { AgreementApi } from '@/models/agreement'
 import { TalonApi } from '@/models/talon'
 
@@ -32,6 +34,8 @@ export const AppMiddlewares = [
 	PatientPhoneApi.middleware,
 	PatientSignatureApi.middleware,
 	PatientBalanceApi.middleware,
+	PatientInvoiceApi.middleware,
+	PatientTransactionApi.middleware,
 	AgreementApi.middleware,
 	TalonApi.middleware,
 ]

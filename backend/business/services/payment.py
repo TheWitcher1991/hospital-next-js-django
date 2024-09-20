@@ -13,7 +13,7 @@ Configuration.secret_key = settings.YOOKASSA_SECRET_KEY
 logger = logging.getLogger("business")
 
 
-class PaymentService(object):
+class PaymentService:
     """
     Сервис для работы с платежами yookassa
     """

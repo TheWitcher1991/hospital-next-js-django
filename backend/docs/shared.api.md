@@ -8,6 +8,7 @@ flowchart TD
     POST --> login
     POST --> signup/patient
     POST --> signup/employee
+    POST --> yookassa-webhook
 ```
 ## GET запросы
 ```mermaid

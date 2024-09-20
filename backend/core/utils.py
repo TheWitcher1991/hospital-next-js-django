@@ -5,22 +5,12 @@ import jwt
 from django.db import transaction
 from django.db.models import QuerySet
 from django.utils import timezone
-from kombu import Exchange, Queue
 from num2words import num2words
 from rest_framework.exceptions import AuthenticationFailed, NotFound, PermissionDenied, ValidationError
 
 from config import settings
 
 from .models import Session, User
-
-
-def create_celery_queue(name: str, x_max_priority: int = 5):
-    return Queue(
-        name,
-        Exchange(name),
-        routing_key=name,
-        queue_arguments={"x-max-priority": x_max_priority},
-    )
 
 
 def queryset_ids(queryset: QuerySet) -> list:

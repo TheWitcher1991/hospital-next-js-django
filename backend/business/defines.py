@@ -18,6 +18,25 @@ class PaymentMethod(models.TextChoices):
     CASHLESS = "cashless", _("Безналичная оплата")
 
 
+class PayerType(models.TextChoices):
+    """
+    Тип плательщика
+    """
+
+    INDIVIDUAL = "INDIVIDUAL", _("Физическое лицо")
+    LEGAL = "LEGAL", _("ЮЛ / ИП")
+
+
+class TransactionType(models.TextChoices):
+    """
+    Тип операции
+    """
+
+    DEPOSIT = "DEPOSIT", _("Доход")
+    WITHDRAWAL = "WITHDRAWAL", _("Расход")
+    TRANSFER = "TRANSFER", _("Перевод средств")
+
+
 class YookassaVatCode:
     """
     Коды ставок НДС в Yookassa
