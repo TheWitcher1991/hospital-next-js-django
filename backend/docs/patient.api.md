@@ -6,6 +6,8 @@ POST   --> logout
 CREATE --> patient-carts
 CREATE --> patient-phones
 CREATE --> patient-signatures
+CREATE --> patient-invoices
+POST   --> patient-invoices/purchase
 ```
 ## GET запросы
 ```mermaid
@@ -19,6 +21,11 @@ LIST   --> patient-agreements
 OBJECT --> patient-agreements/:id
 LIST   --> patient-talons
 OBJECT --> patient-talons/:id
+LIST   --> patient-transactions
+OBJECT --> patient-transactions/:id
+LIST   --> patient-invoices
+OBJECT --> patient-invoices/:id
+OBJECT --> patient-balance
 ```
 ## PUT/PATCH запросы
 ```mermaid
@@ -32,7 +39,8 @@ OBJECT --> patient-signatures/:id
 ```mermaid
 flowchart TD
 DELETE --> patient
-DELETE --> patient-carts
-DELETE --> patient-phones
-DELETE --> patient-signatures   
+DELETE --> patient-carts/:id
+DELETE --> patient-phones/:id
+DELETE --> patient-signatures/:id
+DELETE --> patient-invoices/:id
 ```

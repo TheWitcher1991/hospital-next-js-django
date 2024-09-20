@@ -262,6 +262,8 @@ YOOKASSA_DEBUG = DEBUG
 INVOICE_DAYS_TO_EXPIRE = 30
 PAYMENT_DAYS_TO_EXPIRE = 1
 
+DECIMAL_PLACES = 2
+
 if DEBUG:
     DEBUG_TOOLBAR_PANELS = [
         "debug_toolbar.panels.history.HistoryPanel",

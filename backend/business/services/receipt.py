@@ -12,7 +12,7 @@ Configuration.secret_key = settings.YOOKASSA_SECRET_KEY
 logger = logging.getLogger("business")
 
 
-class ReceiptService(object):
+class ReceiptService:
     """
     Сервис для работы с чеками yookassa
     """
