@@ -183,8 +183,8 @@ if REDIS_PASSWORD:
 else:
     REDIS_URL = f"redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}"
 
-RABBITMQ_USER = env("RABBITMQ_USER", default=None)
-RABBITMQ_PASSWORD = env("RABBITMQ_PASSWORD", default=None)
+RABBITMQ_USER = env("RABBITMQ_USER", default="guest")
+RABBITMQ_PASSWORD = env("RABBITMQ_DEFAULT_PASS", default="guest")
 RABBITMQ_HOST = env("RABBITMQ_HOST", default="rabbitmq")
 RABBITMQ_PORT = env("RABBITMQ_PORT", default=5672)
 RABBITMQ_VHOST = env("RABBITMQ_VHOST", default="/")

@@ -3,7 +3,22 @@ from django.utils import timezone
 from config.celery import BaseTaskWithRetry, app
 
 from .models import Session
-from .utils import queryset_ids
+from .utils import mail, queryset_ids
+
+
+@app.task(bind=True, base=BaseTaskWithRetry)
+def mail_task(
+    self,
+    subject="next-hospital.com",
+    message="",
+    recipient="",
+    fail_silently=False,
+    **kwargs,
+) -> None:
+    try:
+        mail(subject=subject, message=message, recipient=recipient, fail_silently=fail_silently, **kwargs)
+    except Exception as e:
+        raise Exception(e)
 
 
 @app.task(bind=True, base=BaseTaskWithRetry)

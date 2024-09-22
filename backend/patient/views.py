@@ -59,7 +59,7 @@ class PatientTalonViewSet(PatientReadOnlyViewSetMixin):
 
 class PatientAPIView(PatientControlViewMixin):
     queryset = Patient.objects.all()
-    serializer_class = PatientSerializer()
+    serializer_class = PatientSerializer
     patient_field = "id"
 
     def get_serializer_class(self):

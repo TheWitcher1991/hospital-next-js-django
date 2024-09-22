@@ -7,11 +7,15 @@ from django.utils import timezone
 from rest_framework.generics import get_object_or_404
 from yookassa.domain.response import PaymentResponse
 
-from business.defines import PaymentMethod
-from business.models import Invoice
+from business.defines import InvoiceTarget, PaymentMethod
+from business.exceptions import InsufficientBalanceException
+from business.models import Invoice, InvoiceOrder
 from business.services.payment import PaymentService
+from business.services.transaction import TransactionService
 from config import settings
 from core.exceptions import ModelNotDeletedException
+from employee.models import Service
+from patient.models import PatientBalance
 
 logger = logging.getLogger("business")
 
@@ -31,6 +35,13 @@ class InvoiceService:
             logger.error(f"ERROR: Ошибка при получении объекта invoice {invoice_id} {e}")
             raise e
 
+    def get_service_by_id(self, service_id: int) -> Service:
+        try:
+            return get_object_or_404(Service, id=service_id)
+        except Exception as e:
+            logger.error(f"ERROR: Ошибка при получении объекта service {service_id} {e}")
+            raise e
+
     def get_expired(self) -> QuerySet:
         return Invoice.objects.filter(is_paid=False, expires_at__lt=timezone.now())
 
@@ -48,16 +59,95 @@ class InvoiceService:
     def get_description(self, invoice: Invoice) -> str:
         return f"Оплата за интернет-услуги по счёту № {invoice.id} от {invoice.created.strftime('%d.%m.%Y')}, без НДС"
 
+    def calculate_amount(self, invoice: Invoice):
+        try:
+            total_amount = sum(order.get_service_price() for order in invoice.services.all())
+            invoice.amount = total_amount
+            invoice.save()
+        except Exception as e:
+            logger.error(f"ERROR: Ошибка при расчёте суммы по счёту {invoice.id} {e}")
+
     def create(self, data: dict) -> Invoice:
-        pass
+        with transaction.atomic():
+            services = data.pop("services", [])
+            invoice = Invoice.objects.create(**data)
+
+            description = self.get_description(invoice)
+
+            for service in services:
+                s = self.get_service_by_id(service["service_id"])
+                quantity = service.get("quantity", 1)
+                InvoiceOrder.objects.create(
+                    invoice=invoice,
+                    service=s,
+                    quantity=quantity,
+                )
+
+            self.calculate_amount(invoice)
+
+            self.create_payment(invoice)
+
+            if invoice.target == InvoiceTarget.BALANCE:
+                description = (
+                    f"Зачисление на Лицевой счёт по Договору № {invoice.patient.id}"
+                    f" от {invoice.patient.user.date_joined.strftime('%d.%m.%Y')}"
+                )
+
+            if invoice.target == InvoiceTarget.SERVICE:
+                description = (
+                    f"Оплата медицинских услуг по Договору № {invoice.patient.id} "
+                    f"от {invoice.patient.user.date_joined.strftime('%d.%m.%Y')}"
+                )
+
+            invoice.description = description
+            invoice.save()
+
+            return invoice
 
     def capture(self, invoice_id: int) -> Type[NotImplementedError] | bool:
-        pass
+        with transaction.atomic():
+            invoice = self.get_by_id(invoice_id)
+
+            if invoice.is_paid:
+                invoice.captured_at = timezone.now()
+                invoice.save()
+                return True
+
+            if invoice.target == InvoiceTarget.BALANCE:
+                return NotImplementedError
+            if invoice.target == InvoiceTarget.SERVICE:
+                if invoice.patient.balance.balance < invoice.amount:
+                    raise InsufficientBalanceException(
+                        f"Недостаточно средств на балансе. "
+                        f"Не хватает {invoice.amount - invoice.patient.balance.balance}"
+                    )
+
+            invoice.is_paid = True
+            invoice.captured_at = timezone.now()
+            invoice.save()
+
+            if invoice.payment_id:
+                PaymentService.capture(invoice.payment_id, invoice.amount)
+
+            PatientBalance.withdraw(
+                pk=invoice.patient.balance.id,
+                amount=invoice.amount,
+            )
+
+            TransactionService.withdraw(
+                amount=invoice.amount,
+                description=invoice.description,
+                invoice=invoice,
+                patient=invoice.patient,
+                created=invoice.captured_at,
+            )
+
+            return True
 
     def cancel(self, invoice_id: int) -> bool:
         try:
             with transaction.atomic():
-                invoice = InvoiceService.get_by_id(invoice_id=invoice_id)
+                invoice = self.get_by_id(invoice_id)
 
                 if invoice.payment_id:
                     PaymentService.cancel(invoice.payment_id)

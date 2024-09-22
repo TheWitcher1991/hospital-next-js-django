@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from business.defines import PayerType, PaymentMethod, TransactionType
+from business.defines import InvoiceTarget, PayerType, PaymentMethod, TransactionType
 from core.utils import decimal_to_words
 
 
@@ -17,6 +17,11 @@ class Invoice(models.Model):
     )
     payer_type = models.CharField(
         _("Тип плательщика"), choices=PayerType.choices, max_length=32, default=PayerType.INDIVIDUAL
+    )
+    target = models.CharField(
+        _("Цель оплаты"),
+        choices=InvoiceTarget.choices,
+        max_length=32,
     )
     description = models.CharField(_("Назначение платежа"), max_length=255, null=True, blank=True)
     amount = models.DecimalField(
@@ -53,6 +58,26 @@ class Invoice(models.Model):
     @property
     def amount_in_words(self):
         return decimal_to_words(self.amount)
+
+
+class InvoiceOrder(models.Model):
+    invoice = models.ForeignKey(to=Invoice, on_delete=models.CASCADE, related_name="services")
+    service = models.ForeignKey(
+        to="employee.Service",
+        on_delete=models.CASCADE,
+        related_name="orders",
+    )
+    quantity = models.PositiveIntegerField(_("Количество"), default=1)
+
+    class Meta:
+        verbose_name = "Услуга по счету"
+        verbose_name_plural = "Услуги по счетам"
+
+    def __str__(self):
+        return f"{self.invoice} - {self.service} x {self.quantity}"
+
+    def get_service_price(self):
+        return self.service.price * self.quantity
 
 
 class Transaction(models.Model):

@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 
 from django.db.models import QuerySet
 from rest_framework.exceptions import NotFound
-from rest_framework.generics import GenericAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import GenericAPIView, ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from patient.models import Patient
@@ -43,6 +43,10 @@ class PatientViewMixin(PatientMixin, GenericAPIView):
 
 
 class PatientControlViewMixin(PatientMixin, RetrieveUpdateDestroyAPIView):
+    pass
+
+
+class PatientListenViewMixin(PatientMixin, ListCreateAPIView):
     pass
 
 

@@ -2,6 +2,8 @@ from datetime import datetime, timedelta
 from decimal import Decimal
 
 import jwt
+from django.contrib.contenttypes.models import ContentType
+from django.core.mail import send_mail
 from django.db import transaction
 from django.db.models import QuerySet
 from django.utils import timezone
@@ -15,6 +17,30 @@ from .models import Session, User
 
 def queryset_ids(queryset: QuerySet) -> list:
     return list(queryset.values_list("id", flat=True))
+
+
+def get_content_type_for_model(model, for_concrete_model=True) -> ContentType:
+    """
+    Эта функция возвращает ContentType для модели
+    """
+    return ContentType.objects.get_for_model(model, for_concrete_model)
+
+
+def mail(
+    subject="next-hospital.com",
+    message="",
+    recipient="",
+    fail_silently=False,
+    **kwargs,
+):
+    send_mail(
+        subject=subject,
+        message=message,
+        from_email="admin@next-hospital.com",
+        recipient_list=[recipient],
+        fail_silently=fail_silently,
+        **kwargs,
+    )
 
 
 def jwt_encode(user, is_refresh=False) -> str:
