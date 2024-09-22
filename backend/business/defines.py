@@ -18,6 +18,15 @@ class PaymentMethod(models.TextChoices):
     CASHLESS = "cashless", _("Безналичная оплата")
 
 
+class InvoiceTarget(models.TextChoices):
+    """
+    Цель счета
+    """
+
+    BALANCE = "BALANCE", _("Пополнение баланса")
+    SERVICE = "SERVICE", _("Оплата услуги")
+
+
 class PayerType(models.TextChoices):
     """
     Тип плательщика

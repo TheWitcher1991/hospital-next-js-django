@@ -18,18 +18,18 @@ class TransactionService:
         pass
 
     @staticmethod
-    def count_all(member_id: int):
-        return Transaction.objects.filter(member_id=member_id).count()
+    def count_all(patient_id: int):
+        return Transaction.objects.filter(patient_id=patient_id).count()
 
     @staticmethod
-    def count_deposit(member_id: int):
-        return Transaction.objects.filter(member_id=member_id, transaction_type=TransactionType.DEPOSIT).aggregate(
+    def count_deposit(patient_id: int):
+        return Transaction.objects.filter(patient_id=patient_id, transaction_type=TransactionType.DEPOSIT).aggregate(
             sum=Sum("amount")
         )["sum"]
 
     @staticmethod
-    def count_withdrawal(member_id: int):
-        return Transaction.objects.filter(member_id=member_id, transaction_type=TransactionType.WITHDRAWAL).aggregate(
+    def count_withdrawal(patient_id: int):
+        return Transaction.objects.filter(patient_id=patient_id, transaction_type=TransactionType.WITHDRAWAL).aggregate(
             sum=Sum("amount")
         )["sum"]
 

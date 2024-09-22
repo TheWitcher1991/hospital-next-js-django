@@ -23,6 +23,7 @@ LIST   --> patient-talons
 OBJECT --> patient-talons/:id
 LIST   --> patient-transactions
 OBJECT --> patient-transactions/:id
+OBJECT --> patient-transactions/stats
 LIST   --> patient-invoices
 OBJECT --> patient-invoices/:id
 OBJECT --> patient-balance
