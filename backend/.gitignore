@@ -21,6 +21,7 @@ coverage.xml
 /static/redisboard/
 /static/rest_framework/
 celerybeat-schedule
+celerybeat-schedule.*
 supervisord.log
 supervisord.pid
 
