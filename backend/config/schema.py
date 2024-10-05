@@ -1,13 +1,13 @@
 import graphene
 
-import graphql.schema
+import schemas
 
 
-class Query(graphql.schema.Query, graphene.ObjectType):
+class Query(schemas.schema.Query, graphene.ObjectType):
     pass
 
 
-class Mutation(graphql.schema.Mutation, graphene.ObjectType):
+class Mutation(schemas.schema.Mutation, graphene.ObjectType):
     pass
 
 

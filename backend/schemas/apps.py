@@ -1,7 +1,7 @@
 from django.apps import AppConfig
 
 
-class GraphqlConfig(AppConfig):
+class SchemasConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "graphql"
-    label = "graphql"
+    name = "schemas"
+    label = "schemas"

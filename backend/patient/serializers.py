@@ -83,7 +83,7 @@ class UpdatePatientSerializer(serializers.ModelSerializer):
 
 class CreatePatientSerializer(serializers.ModelSerializer):
     oms = serializers.CharField(max_length=16, min_length=16, required=True)
-    patient_type = serializers.PrimaryKeyRelatedField(read_only=True, required=True)
+    patient_type = serializers.PrimaryKeyRelatedField(read_only=True)
 
     class Meta:
         model = User

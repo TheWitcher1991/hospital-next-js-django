@@ -2,7 +2,7 @@ import { FC } from 'react'
 import styles from './index.module.css'
 
 interface ButtonProps extends OmitClassName<DetailedButtonProps> {
-	radius?: 'sm' | 'md' | 'lg'
+	radius?: Size
 	variant?: 'default' | 'primary' | 'secondary' | 'black' | 'danger'
 }
 

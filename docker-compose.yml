@@ -6,13 +6,11 @@ services:
     container_name: nginx-service
     volumes:
       - ./deploy/nginx.conf:/etc/nginx/nginx.conf
+      - ./deploy/.htpasswd:/etc/nginx/.htpasswd
       - /etc/letsencrypt:/etc/letsencrypt
     ports:
       - 80:80
       - 443:443
-    depends_on:
-      - backend
-      - frontend
     networks:
       - default-network
     restart: on-failure
@@ -28,6 +26,10 @@ services:
     extends:
       file: ./docker-compose.base.yml
       service: redis
+    command:
+      - /bin/sh
+      - -c
+      - redis-server --requirepass "$${REDIS_PASSWORD:?REDIS_PASSWORD variable is not set}"
     env_file:
       - ./backend/.env.prod
 
@@ -43,14 +45,25 @@ services:
       file: ./docker-compose.base.yml
       service: zookeeper
     env_file:
-      - ./backend/.env.prod
+      - ./backend/.env.kafka
 
   kafka:
     extends:
       file: ./docker-compose.base.yml
       service: kafka
+    depends_on:
+      - zookeeper:
+          condition: service_started
     env_file:
-      - ./backend/.env.prod
+      - ./backend/.env.kafka
+
+  kafka_ui:
+    extends:
+      file: ./docker-compose.base.yml
+      service: kafka_ui
+    depends_on:
+      - kafka:
+          condition: service_started
 
   backend:
     extends:
@@ -59,6 +72,15 @@ services:
     build:
       context: ./backend
       dockerfile: ./Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_started
 
   frontend:
     extends:
@@ -67,11 +89,17 @@ services:
     build:
       context: ./frontend
       dockerfile: ./Dockerfile
+    depends_on:
+      backend:
+        condition: service_started
 
   redisinsight:
     extends:
       file: ./docker-compose.base.yml
       service: redisinsight
+    depends_on:
+      redis:
+        condition: service_healthy
     env_file:
       - ./backend/.env.prod
 
@@ -98,6 +126,9 @@ services:
       - "--web.console.libraries=/etc/prometheus/console_libraries"
       - "--web.console.templates=/etc/prometheus/consoles"
       - "--log.level=warn"
+    depends_on:
+      nginx:
+        condition: service_started
     networks:
       - default-network
     restart: on-failure
@@ -105,3 +136,11 @@ services:
 networks:
   default-network:
     driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:
+  static_data:
+  media_data:
+  redisinsight_data:

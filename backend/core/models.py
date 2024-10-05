@@ -5,7 +5,7 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
 from .defines import Floor, Role
-from .managers import UserEmployee, UserPatient
+from .managers import UserEmployee, UserManager, UserPatient
 
 
 class User(AbstractUser, PermissionsMixin):
@@ -30,6 +30,7 @@ class User(AbstractUser, PermissionsMixin):
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = ["phone"]
 
+    objects = UserManager()
     patients = UserPatient()
     employees = UserEmployee()
 
@@ -63,14 +64,20 @@ class User(AbstractUser, PermissionsMixin):
         return f"{self.get_role_display()} | {self.last_name} | {self.first_name}"
 
 
-class Session(models.Model):
+class BaseModel(models.Model):
+    created = models.DateTimeField(_("Дата создания"), auto_now_add=True)
+    updated = models.DateTimeField(_("Дата обновления"), auto_now=True)
+
+    class Meta:
+        abstract = True
+
+
+class Session(BaseModel):
     access_token = models.CharField(max_length=1024)
     refresh_token = models.CharField(max_length=1024)
     refresh_token_expires = models.DateTimeField(null=True, blank=True)
     ip = models.CharField(_("IP-адрес"), max_length=255)
     user_agent = models.CharField("User-Agent", max_length=255)
-    created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="sessions")
 
     class Meta:
@@ -88,7 +95,7 @@ class Session(models.Model):
         return self.refresh_token_expires < now()
 
 
-class PatientType(models.Model):
+class PatientType(BaseModel):
     name = models.CharField(_("Название"), max_length=256)
     sale = models.CharField(_("Скидка"), max_length=10)
 
@@ -100,7 +107,7 @@ class PatientType(models.Model):
         return f"{self.name} | скидка - {self.sale}%"
 
 
-class Position(models.Model):
+class Position(BaseModel):
     name = models.CharField(_("Название"), max_length=256)
     functions = models.TextField(_("Функции"))
     salary = models.DecimalField("Зарплата", max_digits=10, decimal_places=0)
@@ -113,7 +120,7 @@ class Position(models.Model):
         return f"{self.name} | {self.salary} руб."
 
 
-class Cabinet(models.Model):
+class Cabinet(BaseModel):
     name = models.CharField(_("Название"), max_length=256)
     number = models.CharField(_("Номер"), max_length=10)
 
@@ -125,7 +132,7 @@ class Cabinet(models.Model):
         return f"{self.name} | {self.number}"
 
 
-class ServiceType(models.Model):
+class ServiceType(BaseModel):
     name = models.CharField(_("Название"), max_length=128)
     ico = models.CharField(_("Иконка mdi-icons"), max_length=128, blank=True, null=True)
 

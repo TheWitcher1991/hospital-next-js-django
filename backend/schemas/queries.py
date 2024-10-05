@@ -3,8 +3,8 @@ import graphene
 from core.models import Cabinet, PatientType, Position
 from core.models import ServiceType as ServiceCategory
 from employee.models import Employee, Service
-from graphql.types import CabinetType, EmployeeType, PositionType, ServiceCategoryType, ServiceType
 from patient.models import Patient
+from schemas.types import CabinetType, EmployeeType, PositionType, ServiceCategoryType, ServiceType
 
 
 class Query(graphene.ObjectType):

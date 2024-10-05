@@ -2,7 +2,7 @@ import { CSSProperties, FC, PropsWithChildren, ReactNode } from 'react'
 
 interface ChipProps extends PropsWithChildren {
 	variant?: 'default' | 'primary' | 'success' | 'warning' | 'danger'
-	size?: 'sm' | 'md' | 'lg'
+	size?: Size
 	startContent?: ReactNode
 	endContent?: ReactNode
 }
