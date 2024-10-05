@@ -35,6 +35,8 @@ services:
       service: zookeeper
     ports:
       - 2181:2181
+    env_file:
+      - ./backend/.env.kafka
 
   kafka:
     extends:
@@ -42,8 +44,26 @@ services:
       service: kafka
     ports:
       - 9092:9092
+      - 9997:9997
       - 29092:29092
       - 29095:29095
+    depends_on:
+      - zookeeper:
+          condition: service_started
+    env_file:
+      - ./backend/.env.kafka
+
+  kafka_ui:
+    extends:
+      file: ./docker-compose.base.yml
+      service: kafka_ui
+    ports:
+      - 8082:8080
+    depends_on:
+      - kafka:
+          condition: service_started
+    environment:
+      DYNAMIC_CONFIG_ENABLED: true
 
   backend:
     extends:
@@ -74,3 +94,15 @@ services:
       - 5540:5540
     env_file:
       - ./backend/.env.dev
+
+networks:
+  default-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+  redis_data:
+  rabbitmq_data:
+  static_data:
+  media_data:
+  redisinsight_data:

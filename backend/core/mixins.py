@@ -1,16 +1,7 @@
-from typing import TYPE_CHECKING
-
 from django.utils.decorators import method_decorator
 from django.views.decorators.cache import cache_page
 from rest_framework.generics import CreateAPIView, GenericAPIView, ListAPIView
 from rest_framework.permissions import AllowAny
-
-if TYPE_CHECKING:
-    _GenericAPIView = GenericAPIView
-    _ListAPIView = ListAPIView
-    _CreateAPIView = CreateAPIView
-else:
-    _GenericAPIView = _ListAPIView = _CreateAPIView = object
 
 
 class AllowAnyMixin:
@@ -18,15 +9,15 @@ class AllowAnyMixin:
     authentication_classes = ()
 
 
-class GenericAllowAnyMixin(_GenericAPIView, AllowAnyMixin):
+class GenericAllowAnyMixin(GenericAPIView, AllowAnyMixin):
     pass
 
 
-class ListAllowAnyMixin(_ListAPIView, AllowAnyMixin):
+class ListAllowAnyMixin(ListAPIView, AllowAnyMixin):
     pass
 
 
-class CreateAllowAnyMixin(_CreateAPIView, AllowAnyMixin):
+class CreateAllowAnyMixin(CreateAPIView, AllowAnyMixin):
     pass
 
 

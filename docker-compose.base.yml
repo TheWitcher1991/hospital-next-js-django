@@ -8,7 +8,7 @@ services:
       - default-network
     restart: on-failure
     healthcheck:
-      test: [ "CMD-SHELL", "pg_isready" ]
+      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER" ]
       interval: 5s
       timeout: 5s
 
@@ -24,7 +24,7 @@ services:
       test: [ "CMD", "redis-cli", "ping" ]
       interval: 3s
       timeout: 10s
-      retries: 5s
+      retries: 5
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
@@ -35,14 +35,15 @@ services:
       - default-network
     restart: on-failure
     healthcheck:
-      test: [ "CMD", "rabbitmqctl", "status" ]
+      test: [ "CMD", "rabbitmq-diagnostics", "-q", "ping" ]
       interval: 3s
       timeout: 10s
-      retries: 5s
+      retries: 5
 
   zookeeper:
     image: confluentinc/cp-zookeeper:7.7.1
     container_name: zookeeper-service
+    hostname: zookeeper
     networks:
       - default-network
     restart: always
@@ -51,9 +52,6 @@ services:
     image: confluentinc/cp-kafka:7.7.1
     container_name: kafka-service
     hostname: kafka
-    depends_on:
-      - zookeeper:
-          condition: service_started
     networks:
       - default-network
     restart: always
@@ -61,9 +59,6 @@ services:
   kafka_ui:
     image: provectuslabs/kafka-ui:v0.7.2
     container_name: kafka-ui-service
-    depends_on:
-      - kafka:
-          condition: service_started
     networks:
       - default-network
     restart: always
@@ -79,15 +74,6 @@ services:
     volumes:
       - static_data:/app/static
       - media_data:/app/media
-    depends_on:
-      postgres:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_healthy
-      redis:
-        condition: service_healthy
-      kafka:
-        condition: service_started
     networks:
       - default-network
     restart: on-failure
@@ -97,9 +83,6 @@ services:
     container_name: redisinsight-service
     volumes:
       - redisinsight_data:/db
-    depends_on:
-      redis:
-        condition: service_healthy
     networks:
       - default-network
     restart: on-failure

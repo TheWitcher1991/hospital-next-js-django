@@ -1,8 +1,21 @@
 {
-  "name": "frontend",
-  "version": "0.1.0",
+  "name": "hospital-next-js-django",
+  "description": "frontend hospital-next-js-django",
+  "version": "1.0.0",
   "private": true,
+  "license": "GPL-3.0",
+  "author": "TheWitcher1991 <ashot.svazyan@yandex.ru>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/TheWitcher1991/hospital-next-js-django"
+  },
   "scripts": {
+    "bump": "yarn version --patch && git add .",
+    "bump:patch": "yarn version --patch && git add.",
+    "bump:minor": "yarn version --minor && git add .",
+    "bump:major": "yarn version --major && git add.",
+    "prettier": "prettier src/**/*.{t,j}s{,x} --no-error-on-unmatched-pattern --check",
+    "prettier:fix": "prettier --write .",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

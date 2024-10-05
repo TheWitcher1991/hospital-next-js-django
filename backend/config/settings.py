@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     "patient",
     "employee",
     "business",
-    "graphql",
+    "schemas",
 ]
 
 MIDDLEWARE = [
@@ -141,6 +141,11 @@ LANGUAGE_CODE = "ru-ru"
 TIME_ZONE = "Europe/Moscow"
 USE_I18N = True
 USE_L10N = True
+
+DJANGO_SUPERUSER_USERNAME = env("DJANGO_SUPERUSER_USERNAME", default="admin")
+DJANGO_SUPERUSER_EMAIL = env("DJANGO_SUPERUSER_EMAIL", default="admin@host.com")
+DJANGO_SUPERUSER_PHONE = env("DJANGO_SUPERUSER_PHONE", default="+79999999999")
+DJANGO_SUPERUSER_PASSWORD = env("DJANGO_SUPERUSER_PASSWORD", default="admin")
 
 SECURE_HSTS_PRELOAD = not DEBUG
 SECURE_SSL_REDIRECT = not DEBUG

@@ -6,6 +6,7 @@ from django.utils.translation import gettext_lazy as _
 from rest_framework.generics import get_object_or_404
 
 from core.decorators import is_amount_positive
+from core.models import BaseModel
 
 from .defines import PatientCartStatus
 from .managers import (
@@ -16,7 +17,7 @@ from .managers import (
 )
 
 
-class Patient(models.Model):
+class Patient(BaseModel):
     address = models.CharField(_("Адрес"), max_length=256, blank=True, null=True)
     oms = models.CharField(_("ОМС"), max_length=16)
     snils = models.CharField(_("СНИЛС"), max_length=16, blank=True, null=True)
@@ -34,7 +35,7 @@ class Patient(models.Model):
         return f"{self.user} | {self.oms}"
 
 
-class PatientBalance(models.Model):
+class PatientBalance(BaseModel):
     balance = models.DecimalField(
         _("Остаток средств"),
         max_digits=10,
@@ -69,7 +70,7 @@ class PatientBalance(models.Model):
         return balance
 
 
-class PatientPhone(models.Model):
+class PatientPhone(BaseModel):
     phone = models.CharField(_("Телефон"), max_length=20)
     patient = models.ForeignKey(to=Patient, on_delete=models.CASCADE, related_name="phones")
 
@@ -78,7 +79,7 @@ class PatientPhone(models.Model):
         verbose_name_plural = _("Телефоны")
 
 
-class PatientSignature(models.Model):
+class PatientSignature(BaseModel):
     signature = models.CharField(_("Открытый ключ"), max_length=128)
     patient = models.ForeignKey(to=Patient, on_delete=models.CASCADE, related_name="signatures")
 
@@ -88,16 +89,16 @@ class PatientSignature(models.Model):
         verbose_name_plural = _("ЭЦП")
 
 
-class PatientCart(models.Model):
+class PatientCart(BaseModel):
     diagnose = models.CharField(_("Диагноз"), max_length=256, blank=True, null=True)
     date_visit = models.DateField(_("Дата визита"))
-    created = models.DateTimeField(_("Дата"), auto_now_add=True)
     status = models.CharField(
         _("Статус"), default=PatientCartStatus.DRAFT, choices=PatientCartStatus.choices, max_length=32
     )
     patient = models.ForeignKey(to=Patient, on_delete=models.CASCADE, related_name="carts")
     service = models.ForeignKey(to="employee.Service", on_delete=models.CASCADE, related_name="patient_carts")
 
+    objects = models.Manager()
     drafts = PatientCartDraftManager()
     actives = PatientCartActiveManager()
     archive = PatientCartArchiveManager()
@@ -113,7 +114,7 @@ class PatientCart(models.Model):
         return f"{self.get_status_display()} | {self.date_visit}"
 
 
-class Agreement(models.Model):
+class Agreement(BaseModel):
     start = models.TimeField(_("Начало"))
     end = models.TimeField(_("Конец"))
     patient_cart = models.ForeignKey(to=PatientCart, on_delete=models.CASCADE, related_name="agreements")
@@ -123,7 +124,7 @@ class Agreement(models.Model):
         verbose_name_plural = _("Договоры")
 
 
-class Talon(models.Model):
+class Talon(BaseModel):
     result = models.TextField(_("Результат"))
     agreement = models.ForeignKey(to=Agreement, on_delete=models.CASCADE, related_name="talons")
 

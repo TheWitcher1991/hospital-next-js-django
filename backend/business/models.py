@@ -2,10 +2,11 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from business.defines import InvoiceTarget, PayerType, PaymentMethod, TransactionType
+from core.models import BaseModel
 from core.utils import decimal_to_words
 
 
-class Invoice(models.Model):
+class Invoice(BaseModel):
     payment_id = models.CharField(_("ID платежа YooKassa"), max_length=255, null=True, blank=True)
     payment_url = models.URLField(_("Ссылка на оплату"), blank=True, null=True)
     payment_method = models.CharField(
@@ -33,8 +34,6 @@ class Invoice(models.Model):
         blank=True,
     )
     is_paid = models.BooleanField(_("Оплачен"), default=False)
-    created = models.DateTimeField(_("Дата создания"), auto_now_add=True)
-    updated = models.DateTimeField(_("Дата обновления"), auto_now=True)
     expires_at = models.DateTimeField(
         _("Дата истечения срока действия"),
         blank=True,
@@ -60,7 +59,7 @@ class Invoice(models.Model):
         return decimal_to_words(self.amount)
 
 
-class InvoiceOrder(models.Model):
+class InvoiceOrder(BaseModel):
     invoice = models.ForeignKey(to=Invoice, on_delete=models.CASCADE, related_name="services")
     service = models.ForeignKey(
         to="employee.Service",
@@ -80,7 +79,7 @@ class InvoiceOrder(models.Model):
         return self.service.price * self.quantity
 
 
-class Transaction(models.Model):
+class Transaction(BaseModel):
     amount = models.DecimalField(
         _("Сумма транзакции"),
         default=0,
@@ -95,7 +94,6 @@ class Transaction(models.Model):
         max_length=32,
     )
     description = models.CharField(_("Описание транзакции"), max_length=255, null=True, blank=True)
-    created = models.DateTimeField(_("Дата создания"), auto_now_add=True)
     invoice = models.ForeignKey(
         to=Invoice,
         related_name="transactions",

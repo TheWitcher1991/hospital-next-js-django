@@ -7,6 +7,8 @@ declare global {
 
 	type LiteralUnion<T extends U, U> = T | (U & Record<any, any>)
 
+	type Size = 'sm' | 'md' | 'lg'
+
 	export interface ListResponse<T> {
 		count: number
 		pages: number

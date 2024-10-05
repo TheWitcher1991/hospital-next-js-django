@@ -1,0 +1,11 @@
+__pycache__
+venv
+.venv
+.git
+.gitignore
+.gitattributes
+.github
+.idea
+docs
+scripts
+bin

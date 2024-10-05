@@ -2,7 +2,7 @@
 name = "hospital-next-js-django"
 version = "1.0.0"
 description = "backend hospital-next-js-django"
-authors = ["TheWitcher1991 <alikzoy@gmail.com>"]
+authors = ["TheWitcher1991 <ashot.svazyan@yandex.ru>"]
 license = "GPL-3.0"
 readme = "README.MD"
 repository = "https://github.com/TheWitcher1991/hospital-next-js-django"

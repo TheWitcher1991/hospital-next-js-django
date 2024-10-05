@@ -3,8 +3,8 @@ import graphene
 from core.models import Position
 from core.models import ServiceType as ServiceCategory
 from employee.models import Employee, Service
-from graphql.inputs import PositionInput, ServiceInput
-from graphql.types import PositionType, ServiceType
+from schemas.inputs import PositionInput, ServiceInput
+from schemas.types import PositionType, ServiceType
 
 
 class CreateService(graphene.Mutation):
