@@ -24,7 +24,7 @@
   "dependencies": {
     "@mdi/font": "^7.4.47",
     "@reduxjs/toolkit": "^2.2.7",
-    "next": "14.2.6",
+    "next": "14.2.10",
     "nextjs-progressbar": "^0.0.16",
     "react": "^18",
     "react-dom": "^18",
